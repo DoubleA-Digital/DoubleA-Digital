@@ -1,399 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pricing — Double-A Digital</title>
-  <meta name="description" content="Transparent, one-time pricing for websites and web apps. Starter $499, Growth $1,199, Pro $2,499. You own your site forever." />
-  <meta property="og:title" content="Pricing — Double-A Digital" />
-  <meta property="og:description" content="One-time pricing. No subscriptions. You own your site forever. Starting at $499." />
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Transparent, one-time pricing. Starter $500, Growth $850, Pro $1,250. You own your site forever. Based in Simi Valley, CA.">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="cursor"></div>
+<button class="scroll-top" aria-label="Scroll to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg></button>
 
-  <div class="cursor"></div>
-  <button class="scroll-top" aria-label="Scroll to top">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
-  </button>
-
-  <nav class="navbar">
-    <div class="container">
-      <a href="index.html" class="nav-logo">
-        <span class="logo-mark"><span class="a1">A</span><span class="a2">A</span></span>
-        <span style="font-family:var(--font-head);font-weight:800;font-size:0.95rem;letter-spacing:-0.01em;margin-left:8px;">Double-A Digital</span>
-      </a>
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="services.html">Services</a>
-        <a href="pricing.html">Pricing</a>
-        <a href="work.html">Our Work</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-      </div>
-      <div class="nav-cta">
-        <a href="contact.html" class="btn btn-primary btn-sm">Get a free demo</a>
-        <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
-      </div>
+<nav class="navbar">
+  <div class="wrap">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-aa"><span class="a1">A</span><span class="a2">A</span></span>
+      <span class="logo-name">Double-A Digital</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="work.html">Our Work</a>
+      <a href="about.html">About</a>
+      <a href="contact.html" data-contact>Contact</a>
     </div>
-  </nav>
-  <div class="mobile-nav">
-    <a href="index.html">Home</a>
-    <a href="services.html">Services</a>
-    <a href="pricing.html">Pricing</a>
-    <a href="work.html">Our Work</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="contact.html" class="btn btn-primary btn-sm">Get a free demo</a>
+    <div class="nav-right">
+      <button class="btn btn-primary btn-sm" data-demo>Get a free demo</button>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
   </div>
+</nav>
+<div class="mobile-menu">
+  <a href="index.html">Home</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a>
+  <a href="work.html">Our Work</a><a href="about.html">About</a><a href="contact.html" data-contact>Contact</a>
+  <button class="btn btn-primary" data-demo style="margin-top:8px;">Get a free demo</button>
+</div>
 
-  <!-- HERO -->
-  <section class="page-hero dot-grid">
-    <div class="container">
-      <p class="label reveal">Pricing</p>
-      <h1 class="display-lg reveal reveal-delay-1">Honest pricing.<br><span style="color:var(--accent);">No surprises.</span></h1>
-      <p class="body-lg muted-text mt-24 reveal reveal-delay-2" style="max-width:500px;">
-        One-time payment. You own your site and code forever. No monthly fees unless you want maintenance.
-      </p>
-    </div>
-  </section>
+<!-- HERO -->
+<section class="page-hero dotgrid">
+  <div class="wrap">
+    <p class="label-line reveal">Pricing</p>
+    <h1 class="h-lg reveal d1">Honest pricing.<br><span class="accent">No surprises.</span></h1>
+    <p class="body-lg muted mt-24 reveal d2" style="max-width:480px;">One-time payment. You own your site and code forever. No monthly fees unless you want maintenance.</p>
+  </div>
+</section>
 
-  <!-- MAIN PRICING PLANS -->
-  <section class="section-pad" style="background:var(--bg-dark);">
-    <div class="container">
-      <div class="full-pricing-grid reveal">
+<!-- PLANS -->
+<section class="sec sec-dark">
+  <div class="wrap">
+    <div class="price-grid reveal">
 
-        <!-- Starter -->
-        <div class="full-pricing-card">
-          <p class="label" style="color:var(--text-muted);margin-bottom:16px;">Starter</p>
-          <h3>For simple, clean sites</h3>
-          <div class="plan-price"><span class="amount">$499</span></div>
-          <p class="one-time">One-time payment</p>
-          <ul class="plan-features">
-            <li>Up to 5 pages</li>
-            <li>Custom design (no templates)</li>
-            <li>Mobile responsive</li>
-            <li>Contact form</li>
-            <li>Basic on-page SEO</li>
-            <li>Google Analytics setup</li>
-            <li>SSL + domain help</li>
-            <li>1 round of revisions</li>
-            <li>Delivered in 7–10 days</li>
-            <li class="na">Booking integration</li>
-            <li class="na">E-commerce</li>
-            <li class="na">Custom animations</li>
-          </ul>
-          <span class="maintenance-pill">+ Basic Maintenance $49/mo</span>
-          <a href="contact.html" class="btn btn-outline plan-cta">Get started</a>
-        </div>
-
-        <!-- Growth -->
-        <div class="full-pricing-card featured-plan">
-          <p class="label" style="color:var(--accent);margin-bottom:16px;">Growth</p>
-          <h3>For businesses ready to grow</h3>
-          <div class="plan-price"><span class="amount" style="color:var(--accent);">$1,199</span></div>
-          <p class="one-time">One-time payment</p>
-          <ul class="plan-features">
-            <li>Up to 10 pages</li>
-            <li>Custom design (no templates)</li>
-            <li>Mobile responsive</li>
-            <li>Contact &amp; booking form</li>
-            <li>Full SEO optimization</li>
-            <li>Google Analytics + Search Console</li>
-            <li>SSL + domain setup</li>
-            <li>3 rounds of revisions</li>
-            <li>Delivered in 10–14 days</li>
-            <li>Booking integration</li>
-            <li>Custom scroll animations</li>
-            <li class="na">E-commerce / ordering</li>
-          </ul>
-          <span class="maintenance-pill" style="border-color:rgba(200,245,66,0.3);color:var(--accent);">+ Standard Maintenance $99/mo</span>
-          <a href="contact.html" class="btn btn-primary plan-cta">Get started</a>
-        </div>
-
-        <!-- Pro -->
-        <div class="full-pricing-card">
-          <p class="label" style="color:var(--text-muted);margin-bottom:16px;">Pro</p>
-          <h3>For full-featured digital presence</h3>
-          <div class="plan-price"><span class="amount">$2,499</span></div>
-          <p class="one-time">One-time payment</p>
-          <ul class="plan-features">
-            <li>Unlimited pages</li>
-            <li>Custom design (no templates)</li>
-            <li>Mobile responsive</li>
-            <li>All forms &amp; integrations</li>
-            <li>Full SEO package</li>
-            <li>Analytics dashboard</li>
-            <li>SSL + domain setup</li>
-            <li>Unlimited revisions</li>
-            <li>Delivered in 14–21 days</li>
-            <li>Booking integration</li>
-            <li>E-commerce / online ordering</li>
-            <li>Priority support &amp; review calls</li>
-          </ul>
-          <span class="maintenance-pill">+ Full Care Maintenance $179/mo</span>
-          <a href="contact.html" class="btn btn-outline plan-cta">Get started</a>
-        </div>
-
-        <!-- Custom -->
-        <div class="full-pricing-card">
-          <p class="label" style="color:var(--text-muted);margin-bottom:16px;">Custom</p>
-          <h3>For complex web applications</h3>
-          <div class="plan-price"><span class="amount" style="font-size:1.75rem;letter-spacing:-0.02em;">Quoted</span></div>
-          <p class="one-time">Based on project scope</p>
-          <ul class="plan-features">
-            <li>Custom web app development</li>
-            <li>User auth &amp; portals</li>
-            <li>Database &amp; backend</li>
-            <li>API integrations</li>
-            <li>Admin dashboards</li>
-            <li>Payment processing</li>
-            <li>Dedicated project manager</li>
-            <li>Staged delivery milestones</li>
-            <li>Full source code handoff</li>
-            <li>Post-launch support period</li>
-            <li>Retainer options available</li>
-            <li>Timeline scoped per project</li>
-          </ul>
-          <span class="maintenance-pill">Maintenance custom quoted</span>
-          <a href="contact.html" class="btn btn-outline-accent plan-cta">Let's talk</a>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- MAINTENANCE PLANS -->
-  <section class="section-pad" style="background:#0d0d0d;">
-    <div class="container">
-      <div class="section-header centered reveal">
-        <p class="label">Optional Add-on</p>
-        <h2 class="display-sm">Monthly Maintenance Plans</h2>
-        <p class="body-md muted-text mt-16">Keep your site secure, updated, and running smoothly. Cancel anytime.</p>
-      </div>
-
-      <div class="maintenance-grid mt-48">
-        <div class="maintenance-card reveal reveal-delay-1">
-          <h3>Basic</h3>
-          <p class="price">$49<span>/mo</span></p>
-          <ul class="feature-list mt-16">
-            <li>Monthly security updates</li>
-            <li>Uptime monitoring</li>
-            <li>1 content update/month</li>
-            <li>Email support (48hr response)</li>
-          </ul>
-          <a href="contact.html" class="btn btn-outline btn-sm mt-32">Add to plan</a>
-        </div>
-        <div class="maintenance-card reveal reveal-delay-2" style="border-color:rgba(200,245,66,0.25);">
-          <h3>Standard</h3>
-          <p class="price">$99<span>/mo</span></p>
-          <ul class="feature-list mt-16">
-            <li>Everything in Basic</li>
-            <li>Weekly backups</li>
-            <li>3 content updates/month</li>
-            <li>Performance monitoring</li>
-            <li>Priority email (24hr response)</li>
-          </ul>
-          <a href="contact.html" class="btn btn-outline btn-sm mt-32">Add to plan</a>
-        </div>
-        <div class="maintenance-card reveal reveal-delay-3">
-          <h3>Full Care</h3>
-          <p class="price">$179<span>/mo</span></p>
-          <ul class="feature-list mt-16">
-            <li>Everything in Standard</li>
-            <li>Daily backups</li>
-            <li>Unlimited content updates</li>
-            <li>Monthly analytics report</li>
-            <li>Phone + priority support</li>
-            <li>Quarterly design refresh</li>
-          </ul>
-          <a href="contact.html" class="btn btn-outline btn-sm mt-32">Add to plan</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ADD-ONS -->
-  <section class="section-pad" style="background:var(--bg-dark);border-top:1px solid var(--border-dark);">
-    <div class="container">
-      <div class="section-header centered reveal">
-        <p class="label">Add-ons</p>
-        <h2 class="display-sm">Extras for any plan.</h2>
-      </div>
-      <div class="addons-grid mt-48">
-        <div class="addon-card reveal reveal-delay-1">
-          <h4>Logo Design</h4>
-          <p>Full logo design package — mark, wordmark, and all file formats.</p>
-          <span class="addon-price">+$199</span>
-        </div>
-        <div class="addon-card reveal reveal-delay-2">
-          <h4>Social Media Kit</h4>
-          <p>Profile photos, banners, and post templates for major platforms.</p>
-          <span class="addon-price">+$149</span>
-        </div>
-        <div class="addon-card reveal reveal-delay-3">
-          <h4>Rush Delivery</h4>
-          <p>Demo in 5 business days. Priority queue, faster turnaround.</p>
-          <span class="addon-price">+$299</span>
-        </div>
-        <div class="addon-card reveal reveal-delay-4">
-          <h4>Extra Pages</h4>
-          <p>Additional pages beyond your plan — menus, bios, detail pages.</p>
-          <span class="addon-price">$75 / page</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- GOOD TO KNOW -->
-  <section class="section-pad-sm" style="background:var(--bg-dark);">
-    <div class="container">
-      <div class="good-to-know reveal">
-        <h3>Good to know</h3>
-        <ul>
-          <li>All plans include a free demo before you pay a single dollar.</li>
-          <li>You own the code, domain, and hosting setup — no vendor lock-in.</li>
-          <li>Hosting is not included, but we'll recommend and set up the best option for your budget (typically $5–$20/mo).</li>
-          <li>Domain registration is separate (typically ~$12/yr) — we'll handle setup at no extra charge.</li>
-          <li>Timelines are estimates from approval of demo. Rush delivery shortens this significantly.</li>
-          <li>Payments are split: 50% upfront after demo approval, 50% on launch day.</li>
+      <!-- Starter -->
+      <div class="price-card">
+        <p class="price-plan-name">Starter</p>
+        <div class="price-amount">$500</div>
+        <p class="price-note">One-time payment · you own it forever</p>
+        <p class="price-desc">Best for simple, clean websites — service businesses, local restaurants, solo operators who need a sharp online presence fast.</p>
+        <ul class="price-features">
+          <li>Up to 3 pages</li>
+          <li>Custom design (no templates)</li>
+          <li>Mobile responsive</li>
+          <li>Contact form</li>
+          <li>Basic on-page SEO</li>
+          <li>Google Analytics setup</li>
+          <li>Domain &amp; hosting setup</li>
+          <li>1 round of revisions</li>
+          <li>Delivered in 7–10 days</li>
+          <li class="na">Online booking</li>
+          <li class="na">E-commerce</li>
+          <li class="na">Custom animations</li>
         </ul>
+        <button class="btn btn-outline" style="width:100%;" data-demo data-plan="Starter">Get started</button>
+      </div>
+
+      <!-- Growth -->
+      <div class="price-card featured">
+        <p class="price-plan-name">Growth</p>
+        <div class="price-amount">$850</div>
+        <p class="price-note">One-time payment · you own it forever</p>
+        <p class="price-desc">For businesses ready to grow their online presence — more pages, booking integration, and full SEO to get found locally.</p>
+        <ul class="price-features">
+          <li>Up to 5 pages</li>
+          <li>Custom design (no templates)</li>
+          <li>Mobile responsive</li>
+          <li>Online booking / scheduling</li>
+          <li>Contact form + inquiry flow</li>
+          <li>Google Business integration</li>
+          <li>Full SEO optimization</li>
+          <li>Domain &amp; hosting setup</li>
+          <li>3 rounds of revisions</li>
+          <li>Delivered in 10–14 days</li>
+          <li class="na">E-commerce / ordering</li>
+          <li class="na">Custom animations</li>
+        </ul>
+        <button class="btn btn-primary" style="width:100%;" data-demo data-plan="Growth">Get started</button>
+      </div>
+
+      <!-- Pro -->
+      <div class="price-card">
+        <div class="price-badge">⭐ 6 months free maintenance</div>
+        <p class="price-plan-name">Pro</p>
+        <div class="price-amount">$1,250</div>
+        <p class="price-note">One-time payment · you own it forever</p>
+        <p class="price-desc">The full package — unlimited pages, e-commerce, custom animations, and 6 months of free maintenance to keep everything running smoothly.</p>
+        <ul class="price-features">
+          <li>Unlimited pages</li>
+          <li>Custom design (no templates)</li>
+          <li>Mobile responsive</li>
+          <li>Online booking / scheduling</li>
+          <li>E-commerce / online ordering</li>
+          <li>Advanced SEO package</li>
+          <li>Custom scroll animations</li>
+          <li>Analytics dashboard setup</li>
+          <li>Domain &amp; hosting setup</li>
+          <li>Unlimited revisions</li>
+          <li>Delivered in 14–21 days</li>
+          <li style="color:var(--accent);font-weight:500;">6 months Basic maintenance FREE</li>
+        </ul>
+        <button class="btn btn-outline" style="width:100%;" data-demo data-plan="Pro">Get started</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MAINTENANCE -->
+<section class="sec sec-dark-2">
+  <div class="wrap">
+    <div class="sec-header reveal">
+      <p class="label-line">Optional Add-on</p>
+      <h2 class="h-sm mt-16">Monthly Maintenance Plans</h2>
+      <p class="body-md muted mt-16">Keep your site secure, updated, and running. Cancel anytime.</p>
+    </div>
+
+    <div class="maint-grid mt-48">
+      <div class="maint-card reveal d1">
+        <h3>Basic</h3>
+        <div class="maint-price">$25<span>/mo</span></div>
+        <ul class="feat-list" style="margin-top:18px;">
+          <li>Weekly site checkup</li>
+          <li>Security &amp; uptime monitoring</li>
+          <li>Content updates as needed</li>
+          <li>Bug fixes</li>
+        </ul>
+        <button class="btn btn-outline btn-sm" style="margin-top:24px;" data-demo>Add to plan</button>
+      </div>
+      <div class="maint-card featured-m reveal d2">
+        <h3>Growth Maintenance</h3>
+        <div class="maint-price">$50<span>/mo</span></div>
+        <ul class="feat-list" style="margin-top:18px;">
+          <li>Everything in Basic</li>
+          <li>New features added every 2–4 days</li>
+          <li>Performance improvements</li>
+          <li>SEO tweaks</li>
+          <li>Priority support</li>
+          <li>Monthly strategy check-in</li>
+        </ul>
+        <button class="btn btn-outline btn-sm" style="margin-top:24px;" data-demo>Add to plan</button>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- FAQ -->
-  <section class="section-pad" style="background:#0d0d0d;">
-    <div class="container">
-      <div class="section-header centered reveal mb-48">
-        <p class="label">FAQ</p>
-        <h2 class="display-sm">Common questions.</h2>
+<!-- GOOD TO KNOW -->
+<section class="sec-sm sec-dark" style="padding-top:0;">
+  <div class="wrap">
+    <div class="good-box reveal">
+      <h3>Good to know</h3>
+      <ul>
+        <li>All plans include a free demo before you pay a single dollar.</li>
+        <li>You own the code, domain, and hosting — no vendor lock-in, ever.</li>
+        <li>Hosting is not included but we'll set it up for you (typically $5–$15/mo).</li>
+        <li>Domain registration is ~$12/yr — setup is included in every plan.</li>
+        <li>Payment is split: 50% after demo approval, 50% on launch day.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec sec-dark-2">
+  <div class="wrap">
+    <div class="sec-header centered reveal" style="margin-bottom:48px;">
+      <p class="label-line label-line-center" style="color:var(--accent);">FAQ</p>
+      <h2 class="h-sm mt-16">Common questions.</h2>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <button class="faq-q">Do I really own my website after paying? <span class="faq-icon"></span></button>
+        <div class="faq-a"><p class="faq-a-inner">Yes, completely. Once you pay, the code is yours — all source files, the domain, the hosting account. No recurring fees unless you choose a maintenance plan, and you can cancel that at any time.</p></div>
       </div>
-
-      <div class="faq-list">
-        <div class="faq-item reveal">
-          <button class="faq-question">
-            Do I really own my website after paying?
-            <span class="faq-icon"></span>
-          </button>
-          <div class="faq-answer">
-            <p class="faq-answer-inner">Yes, completely. Once you pay, the code is yours. We hand over all source files, and you can host it wherever you want. No recurring fees, no lock-in, no "platform" you're stuck on.</p>
-          </div>
-        </div>
-
-        <div class="faq-item reveal">
-          <button class="faq-question">
-            What does "free demo" actually mean?
-            <span class="faq-icon"></span>
-          </button>
-          <div class="faq-answer">
-            <p class="faq-answer-inner">We build a real, working version of your website before you commit to anything. Not a mockup — an actual site you can click through. If you don't love it, you don't pay. Simple.</p>
-          </div>
-        </div>
-
-        <div class="faq-item reveal">
-          <button class="faq-question">
-            How long does it take to build my site?
-            <span class="faq-icon"></span>
-          </button>
-          <div class="faq-answer">
-            <p class="faq-answer-inner">The free demo is usually ready within 5–7 business days. After you approve it and we finalize revisions, launch typically happens within 3–5 more days. Rush delivery cuts this down significantly for an additional fee.</p>
-          </div>
-        </div>
-
-        <div class="faq-item reveal">
-          <button class="faq-question">
-            What if I want changes after launch?
-            <span class="faq-icon"></span>
-          </button>
-          <div class="faq-answer">
-            <p class="faq-answer-inner">Our maintenance plans include ongoing content updates. If you don't have a plan, we charge a flat hourly rate for post-launch changes. Most small updates are quick and affordable.</p>
-          </div>
-        </div>
-
-        <div class="faq-item reveal">
-          <button class="faq-question">
-            Do I need to provide any content?
-            <span class="faq-icon"></span>
-          </button>
-          <div class="faq-answer">
-            <p class="faq-answer-inner">We'll ask for some basic info about your business — what you do, your brand colors if you have them, photos if you have them. We can also help write copy and source stock imagery. We make the process as easy as possible.</p>
-          </div>
-        </div>
-
-        <div class="faq-item reveal">
-          <button class="faq-question">
-            Can you help with SEO and getting found on Google?
-            <span class="faq-icon"></span>
-          </button>
-          <div class="faq-answer">
-            <p class="faq-answer-inner">Absolutely. Every plan includes on-page SEO setup — meta tags, schema markup, sitemap, and Google Search Console integration. For deeper local SEO and ongoing optimization, ask us about our SEO add-on service.</p>
-          </div>
-        </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">What does "free demo" actually mean? <span class="faq-icon"></span></button>
+        <div class="faq-a"><p class="faq-a-inner">We build a real, working version of your website before you commit to anything. Not a mockup — an actual clickable site. If you don't love it, you don't pay. No awkward conversations.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">How long does it take to build my site? <span class="faq-icon"></span></button>
+        <div class="faq-a"><p class="faq-a-inner">The free demo is usually ready in 5–7 business days. After approval and revisions, launch typically takes 3–5 more days. The Pro plan may take up to 21 days for more complex features.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">What if I want changes after launch? <span class="faq-icon"></span></button>
+        <div class="faq-a"><p class="faq-a-inner">Our maintenance plans cover ongoing updates. Without a plan, we charge an hourly rate for post-launch changes — most small updates are quick and affordable.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Can you help me get found on Google? <span class="faq-icon"></span></button>
+        <div class="faq-a"><p class="faq-a-inner">Absolutely. Every plan includes on-page SEO setup — meta tags, schema, sitemap, and Google Search Console. The Growth and Pro plans go deeper with Google Business integration and advanced local SEO.</p></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- CTA -->
-  <section class="cta-banner section-pad dot-grid">
-    <div class="container">
-      <div class="reveal text-center">
-        <h2 class="display-md">Ready to get started?</h2>
-        <p style="color:rgba(255,255,255,0.55);margin-top:16px;font-size:1.05rem;font-weight:300;">Tell us about your business. We'll build a free demo and you'll see exactly what you're getting.</p>
-        <a href="contact.html" class="btn btn-primary btn-lg mt-48">Get your free demo</a>
-      </div>
+<!-- CTA -->
+<section class="sec cta-banner dotgrid">
+  <div class="wrap">
+    <div class="reveal">
+      <h2 class="h-md">Ready to get started?</h2>
+      <p>Tell us about your business. We'll build a free demo and you'll see exactly what you're getting.</p>
+      <button class="btn btn-primary btn-lg" data-demo>Get your free demo</button>
     </div>
-  </section>
+  </div>
+</section>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <span class="logo-mark"><span class="a1">A</span><span class="a2">A</span></span>
-          <p>A Simi Valley studio building websites and apps for local businesses. Fast, clean, and built to last.</p>
-          <div class="footer-social">
-            <a href="#" class="social-icon" aria-label="Instagram">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-            </a>
-            <a href="#" class="social-icon" aria-label="LinkedIn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-            </a>
-            <a href="#" class="social-icon" aria-label="GitHub">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-            </a>
-          </div>
-        </div>
-        <div class="footer-col">
-          <h4>Pages</h4>
-          <a href="index.html">Home</a>
-          <a href="services.html">Services</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="work.html">Our Work</a>
-          <a href="about.html">About</a>
-          <a href="contact.html">Contact</a>
-        </div>
-        <div class="footer-col">
-          <h4>Services</h4>
-          <a href="services.html">Website Design</a>
-          <a href="services.html">Web App Dev</a>
-          <a href="services.html">E-Commerce</a>
-          <a href="services.html">Maintenance</a>
-          <a href="services.html">Logo Design</a>
-        </div>
-        <div class="footer-col">
-          <h4>Contact</h4>
-          <a href="mailto:hello@double-adigital.com">hello@double-adigital.com</a>
-          <a href="tel:+18055550100">(805) 555-0100</a>
-          <a href="#">Simi Valley, CA</a>
-          <a href="contact.html" style="margin-top:8px;color:var(--accent);">Get a free demo →</a>
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo-full"><span class="logo-aa"><span class="a1">A</span><span class="a2">A</span></span><span class="logo-sub">Double-A Digital</span><span class="logo-line"></span></div>
+        <p>A Simi Valley studio building websites and apps for local businesses.</p>
+        <div class="socials" style="margin-top:20px;">
+          <a href="#" class="soc-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" class="soc-icon" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
         </div>
       </div>
-      <div class="footer-bottom">
-        <p>© 2025 Double-A Digital. Built by Aarush &amp; Ajay.</p>
-        <p>Simi Valley, California</p>
-      </div>
+      <div class="footer-col"><h4>Pages</h4><a href="index.html">Home</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="work.html">Our Work</a><a href="about.html">About</a><a href="contact.html" data-contact>Contact</a></div>
+      <div class="footer-col"><h4>Services</h4><a href="services.html">Website Design</a><a href="services.html">Web App Dev</a><a href="services.html">E-Commerce</a><a href="services.html">Maintenance</a></div>
+      <div class="footer-col"><h4>Contact</h4><a href="mailto:hello@double-adigital.com">hello@double-adigital.com</a><a href="contact.html" data-contact style="margin-top:6px;color:var(--accent);">Get a free demo →</a><p style="color:var(--muted);font-size:0.82rem;margin-top:10px;">Simi Valley, CA</p></div>
     </div>
-  </footer>
+    <div class="footer-bottom"><p>© 2025 Double-A Digital. Built by Aarush &amp; Ajay.</p><p>Simi Valley, California</p></div>
+  </div>
+</footer>
 
-  <script src="main.js"></script>
+<script src="main.js"></script>
 </body>
 </html>

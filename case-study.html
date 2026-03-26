@@ -1,238 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Case Study — Double-A Digital</title>
-  <meta name="description" content="Project case study from Double-A Digital." />
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Rosario's Italian Kitchen — a Double-A Digital project case study.">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="cursor"></div>
+<button class="scroll-top" aria-label="Scroll to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg></button>
 
-  <div class="cursor"></div>
-  <button class="scroll-top" aria-label="Scroll to top">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
-  </button>
-
-  <nav class="navbar">
-    <div class="container">
-      <a href="index.html" class="nav-logo">
-        <span class="logo-mark"><span class="a1">A</span><span class="a2">A</span></span>
-        <span style="font-family:var(--font-head);font-weight:800;font-size:0.95rem;letter-spacing:-0.01em;margin-left:8px;">Double-A Digital</span>
-      </a>
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="services.html">Services</a>
-        <a href="pricing.html">Pricing</a>
-        <a href="work.html">Our Work</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-      </div>
-      <div class="nav-cta">
-        <a href="contact.html" class="btn btn-primary btn-sm">Get a free demo</a>
-        <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
-      </div>
+<nav class="navbar">
+  <div class="wrap">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-aa"><span class="a1">A</span><span class="a2">A</span></span>
+      <span class="logo-name">Double-A Digital</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="work.html">Our Work</a>
+      <a href="about.html">About</a>
+      <a href="contact.html" data-contact>Contact</a>
     </div>
-  </nav>
-  <div class="mobile-nav">
-    <a href="index.html">Home</a>
-    <a href="services.html">Services</a>
-    <a href="pricing.html">Pricing</a>
-    <a href="work.html">Our Work</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="contact.html" class="btn btn-primary btn-sm">Get a free demo</a>
+    <div class="nav-right">
+      <button class="btn btn-primary btn-sm" data-demo>Get a free demo</button>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
   </div>
+</nav>
+<div class="mobile-menu">
+  <a href="index.html">Home</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a>
+  <a href="work.html">Our Work</a><a href="about.html">About</a><a href="contact.html" data-contact>Contact</a>
+  <button class="btn btn-primary" data-demo style="margin-top:8px;">Get a free demo</button>
+</div>
 
-  <!-- HERO -->
-  <section class="page-hero dot-grid">
-    <div class="container">
-      <a href="work.html" style="display:inline-flex;align-items:center;gap:8px;color:var(--text-muted);font-family:var(--font-head);font-weight:800;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:32px;transition:color var(--transition);" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--text-muted)'">
-        ← Back to work
+<!-- HERO -->
+<section class="page-hero dotgrid">
+  <div class="wrap">
+    <a href="work.html" style="display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-family:var(--font-head);font-weight:800;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:28px;transition:color var(--ease);" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">← Back to work</a>
+    <div class="tags mb-16 reveal"><span class="tag">Restaurant</span><span class="tag">Booking</span><span class="tag tag-a">SEO</span></div>
+    <h1 class="h-lg reveal d1">Rosario's Italian Kitchen</h1>
+    <p class="body-lg muted mt-24 reveal d2" style="max-width:540px;">A full restaurant website with custom menu, online reservations, and local SEO — built to bring more tables to a beloved Simi Valley restaurant.</p>
+  </div>
+</section>
+
+<!-- CASE STUDY -->
+<section class="sec sec-dark">
+  <div class="wrap">
+    <div class="ph-img reveal" style="height:440px;margin-bottom:72px;border-radius:14px;">
+      <div class="ph-motif geo" style="transform:scale(5);">
+        <div class="s s1"></div><div class="s s2"></div><div class="s s3"></div><div class="s s4"></div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="gap:72px;align-items:start;">
+      <div>
+        <div class="card reveal" style="margin-bottom:32px;">
+          <h3 style="font-family:var(--font-head);font-weight:800;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;">Project Details</h3>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div><p style="font-size:0.68rem;font-family:var(--font-head);font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Client</p><p style="font-size:0.9rem;color:var(--white);margin-top:3px;">Rosario's Italian Kitchen</p></div>
+            <div><p style="font-size:0.68rem;font-family:var(--font-head);font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Type</p><p style="font-size:0.9rem;color:var(--white);margin-top:3px;">Website + Booking Integration</p></div>
+            <div><p style="font-size:0.68rem;font-family:var(--font-head);font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Plan</p><p style="font-size:0.9rem;color:var(--accent);margin-top:3px;">Growth — $850</p></div>
+            <div><p style="font-size:0.68rem;font-family:var(--font-head);font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Delivered</p><p style="font-size:0.9rem;color:var(--white);margin-top:3px;">11 business days</p></div>
+          </div>
+        </div>
+
+        <div class="stats-row reveal" style="grid-template-columns:1fr 1fr;border-radius:var(--r-lg);">
+          <div class="stat"><div class="stat-n">3×</div><div class="stat-l">More reservations</div></div>
+          <div class="stat"><div class="stat-n">#1</div><div class="stat-l">Local search rank</div></div>
+          <div class="stat"><div class="stat-n">2s</div><div class="stat-l">Page load time</div></div>
+          <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Owner satisfied</div></div>
+        </div>
+      </div>
+
+      <div class="reveal d1">
+        <h2 class="h-sm" style="margin-bottom:20px;">The challenge</h2>
+        <p style="color:var(--muted);font-size:0.92rem;line-height:1.8;margin-bottom:14px;">Rosario's had been a fixture in Simi Valley for 15+ years, but their website was stuck in 2010. No mobile support, no online reservations, and buried on Google. Diners were finding competitors first.</p>
+
+        <h2 class="h-sm" style="margin-bottom:20px;margin-top:36px;">What we built</h2>
+        <p style="color:var(--muted);font-size:0.92rem;line-height:1.8;margin-bottom:14px;">We redesigned from scratch — a full-screen hero, a clean digital menu organized by course, and an integrated reservation widget that feeds directly into their front-of-house system. We also set up their Google Business Profile and implemented local SEO schema.</p>
+
+        <h2 class="h-sm" style="margin-bottom:20px;margin-top:36px;">The result</h2>
+        <p style="color:var(--muted);font-size:0.92rem;line-height:1.8;">Within 60 days of launch, online reservations tripled. They rank #1 in local search for their category. The owner called it the best investment they've made in years.</p>
+
+        <button class="btn btn-primary mt-48" data-demo>Get results like this →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec-sm sec-dark-2">
+  <div class="wrap">
+    <div class="flex-between mb-28 reveal" style="flex-wrap:wrap;gap:12px;">
+      <h2 class="h-sm">More work</h2>
+      <a href="work.html" class="btn btn-outline btn-sm">See all →</a>
+    </div>
+    <div class="work-grid reveal d1">
+      <a href="case-study.html" class="work-card">
+        <div class="work-card-img"><div class="ph-img" style="height:180px;"><div class="ph-motif geo"><div class="s s1"></div><div class="s s2"></div><div class="s s3"></div><div class="s s4"></div></div></div><div class="work-overlay"><span>View project →</span></div></div>
+        <div class="work-card-info"><h3>Peak Form Gym</h3><div class="tags mt-8"><span class="tag">Fitness</span><span class="tag tag-a">Web App</span></div></div>
       </a>
-      <div class="work-card-tags mb-16 reveal">
-        <span class="tag">Restaurant</span>
-        <span class="tag">Booking</span>
-        <span class="tag tag-accent">SEO</span>
-      </div>
-      <h1 class="display-lg reveal reveal-delay-1">Rosario's Italian Kitchen</h1>
-      <p class="body-lg muted-text mt-24 reveal reveal-delay-2" style="max-width:560px;">
-        A full restaurant website with custom menu, online reservation system, and local SEO — built to bring more tables to a beloved Simi Valley restaurant.
-      </p>
+      <a href="case-study.html" class="work-card">
+        <div class="work-card-img"><div class="ph-img" style="height:180px;"><div class="ph-motif geo"><div class="s s1"></div><div class="s s2"></div><div class="s s3"></div><div class="s s4"></div></div></div><div class="work-overlay"><span>View project →</span></div></div>
+        <div class="work-card-info"><h3>Valley Auto Pros</h3><div class="tags mt-8"><span class="tag">Auto Shop</span><span class="tag tag-a">E-Commerce</span></div></div>
+      </a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- CASE STUDY CONTENT -->
-  <section class="section-pad" style="background:var(--bg-dark);">
-    <div class="container">
-
-      <!-- Hero Image -->
-      <div class="placeholder-img reveal" style="height:480px;margin-bottom:80px;border-radius:12px;">
-        <div class="img-motif geo-motif-lg">
-          <div class="sq sq-1"></div><div class="sq sq-2"></div>
-          <div class="sq sq-3"></div><div class="sq sq-4"></div>
-        </div>
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo-full"><span class="logo-aa"><span class="a1">A</span><span class="a2">A</span></span><span class="logo-sub">Double-A Digital</span><span class="logo-line"></span></div>
+        <p>A Simi Valley studio building websites and apps for local businesses.</p>
+        <div class="socials" style="margin-top:20px;"><a href="#" class="soc-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a href="#" class="soc-icon" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a></div>
       </div>
-
-      <div class="grid-2" style="gap:80px;align-items:start;">
-
-        <!-- Left: details -->
-        <div>
-          <div style="border:1px solid var(--border-dark);border-radius:var(--radius-lg);padding:32px;margin-bottom:40px;" class="reveal">
-            <h3 style="font-family:var(--font-head);font-weight:800;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:20px;">Project Details</h3>
-            <div style="display:flex;flex-direction:column;gap:16px;">
-              <div>
-                <p style="font-size:0.72rem;font-family:var(--font-head);font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);">Client</p>
-                <p style="font-size:0.95rem;color:var(--white);margin-top:4px;">Rosario's Italian Kitchen</p>
-              </div>
-              <div>
-                <p style="font-size:0.72rem;font-family:var(--font-head);font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);">Type</p>
-                <p style="font-size:0.95rem;color:var(--white);margin-top:4px;">Website + Booking Integration</p>
-              </div>
-              <div>
-                <p style="font-size:0.72rem;font-family:var(--font-head);font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);">Plan</p>
-                <p style="font-size:0.95rem;color:var(--accent);margin-top:4px;">Growth — $1,199</p>
-              </div>
-              <div>
-                <p style="font-size:0.72rem;font-family:var(--font-head);font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);">Delivered</p>
-                <p style="font-size:0.95rem;color:var(--white);margin-top:4px;">12 business days</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="stats-row reveal" style="grid-template-columns:1fr 1fr;border-radius:var(--radius-lg);">
-            <div class="stat-item" style="border-radius:0;">
-              <div class="stat-num">3×</div>
-              <div class="stat-label">More reservations</div>
-            </div>
-            <div class="stat-item" style="border-radius:0;">
-              <div class="stat-num">#1</div>
-              <div class="stat-label">Local search rank</div>
-            </div>
-            <div class="stat-item" style="border-radius:0;">
-              <div class="stat-num">2s</div>
-              <div class="stat-label">Page load time</div>
-            </div>
-            <div class="stat-item" style="border-radius:0;">
-              <div class="stat-num">100%</div>
-              <div class="stat-label">Owner satisfied</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right: story -->
-        <div class="reveal reveal-delay-1">
-          <h2 style="font-family:var(--font-head);font-weight:800;font-size:1.75rem;letter-spacing:-0.02em;margin-bottom:24px;">The challenge</h2>
-          <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.8;margin-bottom:16px;">
-            Rosario's had been a fixture in Simi Valley for over 15 years, but their website was stuck in 2010. No mobile support, no online reservations, and buried on Google. Diners were finding competitors first.
-          </p>
-
-          <h2 style="font-family:var(--font-head);font-weight:800;font-size:1.75rem;letter-spacing:-0.02em;margin-bottom:24px;margin-top:40px;">What we built</h2>
-          <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.8;margin-bottom:16px;">
-            We redesigned the entire site from scratch — a full-screen hero with appetizing photography, a clean digital menu organized by course, and an integrated reservation widget that feeds directly into their front-of-house system.
-          </p>
-          <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.8;">
-            We also set up their Google Business Profile, submitted their sitemap, and implemented local SEO schema so they'd show up for "Italian restaurant near me" searches in Simi Valley and neighboring areas.
-          </p>
-
-          <h2 style="font-family:var(--font-head);font-weight:800;font-size:1.75rem;letter-spacing:-0.02em;margin-bottom:24px;margin-top:40px;">The result</h2>
-          <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.8;">
-            Within 60 days of launch, online reservations tripled. They rank #1 in local search for their category. The owner told us it's the best investment they've made in years.
-          </p>
-
-          <a href="contact.html" class="btn btn-primary mt-48">Get results like this →</a>
-        </div>
-      </div>
-
+      <div class="footer-col"><h4>Pages</h4><a href="index.html">Home</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="work.html">Our Work</a><a href="about.html">About</a><a href="contact.html" data-contact>Contact</a></div>
+      <div class="footer-col"><h4>Services</h4><a href="services.html">Website Design</a><a href="services.html">Web App Dev</a><a href="services.html">E-Commerce</a><a href="services.html">Maintenance</a></div>
+      <div class="footer-col"><h4>Contact</h4><a href="mailto:hello@double-adigital.com">hello@double-adigital.com</a><a href="contact.html" data-contact style="margin-top:6px;color:var(--accent);">Get a free demo →</a><p style="color:var(--muted);font-size:0.82rem;margin-top:10px;">Simi Valley, CA</p></div>
     </div>
-  </section>
+    <div class="footer-bottom"><p>© 2025 Double-A Digital. Built by Aarush &amp; Ajay.</p><p>Simi Valley, California</p></div>
+  </div>
+</footer>
 
-  <!-- MORE WORK -->
-  <section class="section-pad-sm" style="background:#0d0d0d;">
-    <div class="container">
-      <div class="flex-between mb-32 reveal">
-        <h2 style="font-family:var(--font-head);font-weight:800;font-size:1.25rem;letter-spacing:-0.01em;">More work</h2>
-        <a href="work.html" class="btn btn-outline btn-sm">See all →</a>
-      </div>
-      <div class="grid-2 reveal reveal-delay-1">
-        <a href="case-study.html" class="work-card">
-          <div class="work-card-img" style="height:200px;">
-            <div class="placeholder-img" style="height:100%;">
-              <div class="img-motif geo-motif"><div class="sq sq-1"></div><div class="sq sq-2"></div><div class="sq sq-3"></div><div class="sq sq-4"></div></div>
-            </div>
-            <div class="work-card-overlay"><span>View project →</span></div>
-          </div>
-          <div class="work-card-info">
-            <h3>Peak Form Gym</h3>
-            <div class="work-card-tags mt-8"><span class="tag">Fitness</span><span class="tag tag-accent">Web App</span></div>
-          </div>
-        </a>
-        <a href="case-study.html" class="work-card">
-          <div class="work-card-img" style="height:200px;">
-            <div class="placeholder-img" style="height:100%;">
-              <div class="img-motif geo-motif"><div class="sq sq-1"></div><div class="sq sq-2"></div><div class="sq sq-3"></div><div class="sq sq-4"></div></div>
-            </div>
-            <div class="work-card-overlay"><span>View project →</span></div>
-          </div>
-          <div class="work-card-info">
-            <h3>Valley Auto Pros</h3>
-            <div class="work-card-tags mt-8"><span class="tag">Auto Shop</span><span class="tag tag-accent">E-Commerce</span></div>
-          </div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <span class="logo-mark"><span class="a1">A</span><span class="a2">A</span></span>
-          <p>A Simi Valley studio building websites and apps for local businesses. Fast, clean, and built to last.</p>
-          <div class="footer-social">
-            <a href="#" class="social-icon" aria-label="Instagram">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-            </a>
-            <a href="#" class="social-icon" aria-label="LinkedIn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-            </a>
-            <a href="#" class="social-icon" aria-label="GitHub">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-            </a>
-          </div>
-        </div>
-        <div class="footer-col">
-          <h4>Pages</h4>
-          <a href="index.html">Home</a>
-          <a href="services.html">Services</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="work.html">Our Work</a>
-          <a href="about.html">About</a>
-          <a href="contact.html">Contact</a>
-        </div>
-        <div class="footer-col">
-          <h4>Services</h4>
-          <a href="services.html">Website Design</a>
-          <a href="services.html">Web App Dev</a>
-          <a href="services.html">E-Commerce</a>
-          <a href="services.html">Maintenance</a>
-          <a href="services.html">Logo Design</a>
-        </div>
-        <div class="footer-col">
-          <h4>Contact</h4>
-          <a href="mailto:hello@double-adigital.com">hello@double-adigital.com</a>
-          <a href="tel:+18055550100">(805) 555-0100</a>
-          <a href="#">Simi Valley, CA</a>
-          <a href="contact.html" style="margin-top:8px;color:var(--accent);">Get a free demo →</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>© 2025 Double-A Digital. Built by Aarush &amp; Ajay.</p>
-        <p>Simi Valley, California</p>
-      </div>
-    </div>
-  </footer>
-
-  <script src="main.js"></script>
+<script src="main.js"></script>
 </body>
 </html>
