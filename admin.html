@@ -321,6 +321,17 @@
     .toast-text strong { font-weight:600; }
     .toast-close { background:none; border:none; color:var(--muted); cursor:pointer; font-size:1rem; line-height:1; padding:0; }
 
+    /* ── LEADS COUNT ── */
+    .leads-count { font-size:0.75rem; color:var(--muted); margin-bottom:10px; padding:0 2px; }
+    .leads-count strong { color:var(--white); }
+
+    /* ── ROW QUICK ACTIONS ── */
+    .row-actions { display:flex; align-items:center; gap:4px; opacity:0; transition:opacity 0.15s; }
+    tbody tr:hover .row-actions { opacity:1; }
+    .row-action-btn { width:26px; height:26px; border-radius:6px; border:1px solid var(--border); background:transparent; color:var(--muted); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.15s; flex-shrink:0; }
+    .row-action-btn:hover { border-color:var(--accent); color:var(--accent); background:rgba(200,245,66,0.06); }
+    .row-action-btn svg { width:13px; height:13px; pointer-events:none; }
+
     /* ── MISC ── */
     .breakbar-row { margin-bottom:12px; }
     .breakbar-top { display:flex; justify-content:space-between; font-size:0.78rem; margin-bottom:5px; }
@@ -448,7 +459,11 @@
             <option value="contact">Contact Form</option>
             <option value="demo">Demo Request</option>
           </select>
+          <button class="btn-sm-outline" id="unread-filter-btn" title="Show unread only">Unread</button>
+          <button class="btn-sm-outline" id="mark-read-btn" title="Mark all visible as read">Mark Read</button>
+          <button class="btn-sm-outline" id="refresh-btn" title="Refresh leads">↻ Refresh</button>
         </div>
+        <div class="leads-count" id="leads-count"></div>
         <div class="table-wrap">
           <table id="leads-table">
             <thead>
@@ -461,6 +476,7 @@
                 <th data-sort="status">Status</th>
                 <th data-sort="timestamp">Age</th>
                 <th>Follow-up</th>
+                <th style="width:72px;">Actions</th>
               </tr>
             </thead>
             <tbody id="leads-tbody"></tbody>
@@ -592,6 +608,7 @@
   <div class="drawer-footer">
     <button class="btn-save" id="drawer-save">Save Changes</button>
     <span class="save-feedback" id="save-feedback">Saved ✓</span>
+    <button class="btn-sm-outline" id="drawer-close-btn" style="margin-left:auto;margin-right:8px;">Close</button>
     <button class="btn-delete" id="drawer-delete">Delete</button>
   </div>
 </div>
@@ -642,8 +659,10 @@ const sbH = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Ty
 
 async function sbFetch() {
   const r = await fetch(`${SB_URL}/rest/v1/leads?select=*&order=created_at.desc`, { headers: sbH });
-  if (!r.ok) throw new Error();
-  return r.json();
+  if (!r.ok) throw new Error('Supabase ' + r.status);
+  const data = await r.json();
+  if (!Array.isArray(data)) throw new Error('Unexpected response');
+  return data;
 }
 async function sbUpdate(id, data) {
   const b = { ...data };
@@ -673,9 +692,13 @@ async function sbBulkDelete(ids) {
 
 function tryJSON(s, fb) { try { return JSON.parse(s); } catch { return fb; } }
 function normLead(l) {
+  if (!l || typeof l !== 'object') return null;
   return { ...l, id: String(l.id), timestamp: l.created_at || l.timestamp || new Date().toISOString(),
-    addons: typeof l.addons === 'string' ? tryJSON(l.addons, []) : (l.addons || []),
-    read: l.read === true || l.read === 'true' };
+    addons: typeof l.addons === 'string' ? tryJSON(l.addons, []) : (Array.isArray(l.addons) ? l.addons : []),
+    read: l.read === true || l.read === 'true',
+    status: l.status || 'new', notes: l.notes || '', name: l.name || '', business: l.business || '',
+    email: l.email || '', phone: l.phone || '', source: l.source || 'contact',
+    service: l.service || '', budget: l.budget || '', plan: l.plan || '', btype: l.btype || '', message: l.message || '' };
 }
 
 /* ══════════════════════════════════════════════════
@@ -731,8 +754,7 @@ if (sessionStorage.getItem(AUTH_KEY) === '1') showApp();
    INIT
 ══════════════════════════════════════════════════ */
 async function initApp() {
-  await loadLeads();
-  renderAll();
+  // Wire up ALL event listeners first — buttons must always work even if data fails
   initNav();
   initDrawer();
   initFilters();
@@ -741,17 +763,21 @@ async function initApp() {
   initExport();
   initNotifications();
   setTopbarDate();
+
+  // Then load data and render
+  await loadLeads();
+  try { renderAll(); } catch(e) { console.error('Render error:', e); }
   startPolling();
 }
 
 async function loadLeads() {
   try {
     const data = await sbFetch();
-    leads = data.map(normLead);
+    leads = data.map(normLead).filter(Boolean);
     localStorage.setItem(LEADS_KEY, JSON.stringify(leads));
     lastLeadCount = leads.length;
   } catch {
-    leads = JSON.parse(localStorage.getItem(LEADS_KEY) || '[]');
+    try { leads = JSON.parse(localStorage.getItem(LEADS_KEY) || '[]'); } catch { leads = []; }
   }
 }
 
@@ -882,7 +908,8 @@ function applyFilters() {
     const mq  = !q  || [l.name,l.business,l.email].some(v=>(v||'').toLowerCase().includes(q));
     const mst = !st || l.status===st;
     const ms  = !src|| l.source===src;
-    return mq && mst && ms;
+    const mu  = !showUnreadOnly || !l.read;
+    return mq && mst && ms && mu;
   });
   filteredLeads.sort((a,b) => {
     let av=a[sortCol]||'', bv=b[sortCol]||'';
@@ -898,9 +925,17 @@ function renderLeadsTable() {
   if (!filteredLeads.length) { table.style.display='none'; empty.style.display='block'; return; }
   table.style.display=''; empty.style.display='none';
 
+  // Lead count summary
+  const countEl = document.getElementById('leads-count');
+  if (countEl) {
+    const unread = filteredLeads.filter(l=>!l.read).length;
+    countEl.innerHTML = `<strong>${filteredLeads.length}</strong> of ${leads.length} leads${unread>0?` &nbsp;·&nbsp; <span style="color:var(--accent);">${unread} unread</span>`:''}`;
+  }
+
   tbody.innerHTML = filteredLeads.map(l => {
     const fu = getFollowup(l.id);
     const fuBadge = fu ? `<div class="${followupClass(fu)}">${formatDateShort(fu)}</div>` : '<span style="color:var(--muted2);font-size:0.75rem;">—</span>';
+    const emailHref = l.email ? `mailto:${esc(l.email)}` : '#';
     return `<tr data-id="${l.id}" class="${selectedIds.has(l.id)?'selected':''}">
       <td class="cb-cell"><input type="checkbox" class="row-cb" data-id="${l.id}" ${selectedIds.has(l.id)?'checked':''}></td>
       <td class="bold" style="padding-left:${!l.read?'10px':'14px'};position:relative;">
@@ -913,15 +948,27 @@ function renderLeadsTable() {
       <td>${statusBadge(l.status)}</td>
       <td>${ageBadge(l.timestamp)}</td>
       <td>${fuBadge}</td>
+      <td><div class="row-actions">
+        <a class="row-action-btn" href="${emailHref}" target="_blank" title="Send email" onclick="event.stopPropagation()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+        <button class="row-action-btn row-open-btn" data-id="${l.id}" title="Open lead">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div></td>
     </tr>`;
   }).join('');
 
   tbody.querySelectorAll('tr').forEach(row => {
     row.addEventListener('click', e => {
-      if (e.target.classList.contains('row-cb')) return;
+      if (e.target.classList.contains('row-cb') || e.target.closest('.row-actions')) return;
       const l = leads.find(x => x.id===row.dataset.id);
       if (l) openDrawer(l);
     });
+  });
+
+  tbody.querySelectorAll('.row-open-btn').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); const l=leads.find(x=>x.id===btn.dataset.id); if(l) openDrawer(l); });
   });
 
   tbody.querySelectorAll('.row-cb').forEach(cb => {
@@ -932,6 +979,8 @@ function renderLeadsTable() {
     });
   });
 }
+
+let showUnreadOnly = false;
 
 function initFilters() {
   document.getElementById('search-input').addEventListener('input', () => { applyFilters(); renderLeadsTable(); });
@@ -947,6 +996,34 @@ function initFilters() {
       if (sortCol===th.dataset.sort) sortAsc=!sortAsc; else { sortCol=th.dataset.sort; sortAsc=true; }
       applyFilters(); renderLeadsTable();
     });
+  });
+
+  // Unread filter toggle
+  document.getElementById('unread-filter-btn').addEventListener('click', () => {
+    showUnreadOnly = !showUnreadOnly;
+    const btn = document.getElementById('unread-filter-btn');
+    btn.style.borderColor = showUnreadOnly ? 'var(--accent)' : '';
+    btn.style.color = showUnreadOnly ? 'var(--accent)' : '';
+    applyFilters(); renderLeadsTable();
+  });
+
+  // Mark all visible as read
+  document.getElementById('mark-read-btn').addEventListener('click', async () => {
+    const unread = filteredLeads.filter(l => !l.read);
+    if (!unread.length) return;
+    unread.forEach(l => { l.read = true; });
+    renderLeadsTable(); updateNewBadge();
+    try { await Promise.all(unread.map(l => sbUpdate(l.id, { read: 'true' }))); } catch {}
+  });
+
+  // Refresh from Supabase
+  document.getElementById('refresh-btn').addEventListener('click', async () => {
+    const btn = document.getElementById('refresh-btn');
+    btn.textContent = '↻ Loading…'; btn.disabled = true;
+    await loadLeads();
+    try { renderAll(); } catch {}
+    btn.textContent = '↻ Refresh'; btn.disabled = false;
+    showToast('Leads refreshed','↻');
   });
 }
 
@@ -973,9 +1050,10 @@ function followupClass(date) {
 }
 
 function updateNewBadge() {
-  const n = leads.filter(l => l.status==='new').length;
+  const n = leads.filter(l => !l.read).length;
   const b = document.getElementById('new-count-badge');
-  if (n>0) { b.textContent=n; b.style.display=''; } else b.style.display='none';
+  if (n>0) { b.textContent=n; b.style.display=''; document.title=`(${n}) Admin — Double-A Digital`; }
+  else { b.style.display='none'; document.title='Admin — Double-A Digital'; }
 }
 
 /* ══════════════════════════════════════════════════
@@ -986,17 +1064,23 @@ function initBulk() {
     const s = document.getElementById('bulk-status-select').value;
     if (!s || !selectedIds.size) return;
     const ids = [...selectedIds];
-    await sbBulkUpdate(ids, { status: s });
+    const btn = document.getElementById('bulk-apply');
+    btn.textContent = 'Saving…'; btn.disabled = true;
+    // Update local state immediately so UI feels instant
     ids.forEach(id => { const l=leads.find(x=>x.id===id); if(l){ addActivity(id,`Status changed to ${s}`); l.status=s; } });
     clearBulk(); renderAll();
+    // Sync to Supabase in background
+    try { await sbBulkUpdate(ids, { status: s }); } catch(e) { console.warn('Bulk update sync failed:', e); }
+    btn.textContent = 'Apply'; btn.disabled = false;
   });
   document.getElementById('bulk-delete').addEventListener('click', async () => {
     if (!selectedIds.size) return;
     if (!confirm(`Delete ${selectedIds.size} lead(s)?`)) return;
     const ids = [...selectedIds];
-    await sbBulkDelete(ids);
+    // Remove locally first for instant feedback
     leads = leads.filter(l => !ids.includes(l.id));
     clearBulk(); renderAll();
+    try { await sbBulkDelete(ids); } catch(e) { console.warn('Bulk delete sync failed:', e); }
   });
   document.getElementById('bulk-cancel').addEventListener('click', clearBulk);
 }
@@ -1229,6 +1313,7 @@ function renderAnalytics() {
 ══════════════════════════════════════════════════ */
 function initDrawer() {
   document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+  document.getElementById('drawer-close-btn').addEventListener('click', closeDrawer);
   document.getElementById('drawer-backdrop').addEventListener('click', closeDrawer);
   document.getElementById('drawer-save').addEventListener('click', saveDrawer);
   document.getElementById('drawer-delete').addEventListener('click', async () => {
@@ -1320,7 +1405,7 @@ async function saveDrawer() {
   const newFu     = document.getElementById('d-followup').value;
   const newDv     = document.getElementById('d-deal-value').value;
 
-  if (newStatus !== currentLead.status) addActivity(currentLead.id, `Status changed to ${newStatus}`);
+  if (newStatus !== currentLead.status) addActivity(currentLead.id, `Status → ${newStatus}`);
   if (newNotes !== currentLead.notes)   addActivity(currentLead.id, 'Notes updated');
   if (newFu !== getFollowup(currentLead.id) && newFu) addActivity(currentLead.id, `Follow-up set for ${formatDateShort(newFu)}`);
 
@@ -1332,13 +1417,14 @@ async function saveDrawer() {
   const idx = leads.findIndex(l => l.id===currentLead.id);
   if (idx !== -1) leads[idx] = currentLead;
 
-  await sbUpdate(currentLead.id, { status: newStatus, notes: newNotes });
-  renderAll();
-  renderActivityLog(currentLead.id);
-
+  // Show saved instantly, then sync to Supabase
   const fb = document.getElementById('save-feedback');
   fb.classList.add('show');
   setTimeout(() => fb.classList.remove('show'), 2000);
+  renderAll();
+  renderActivityLog(currentLead.id);
+
+  try { await sbUpdate(currentLead.id, { status: newStatus, notes: newNotes }); } catch(e) { console.warn('Save sync failed:', e); }
 }
 
 /* ══════════════════════════════════════════════════
@@ -1426,21 +1512,20 @@ function startPolling() {
       const data = await sbFetch();
       const newCount = data.length;
       if (newCount > lastLeadCount && lastLeadCount > 0) {
-        const diff = newCount - lastLeadCount;
         const newest = data[0];
-        if (Notification.permission === 'granted') {
+        if ('Notification' in window && Notification.permission === 'granted' && newest) {
           new Notification('New lead — Double-A Digital', {
-            body: `${newest.name} from ${newest.business||'unknown business'} just submitted a ${newest.source==='demo'?'demo request':'contact form'}.`,
+            body: `${newest.name||'Someone'} from ${newest.business||'unknown business'} just submitted a ${newest.source==='demo'?'demo request':'contact form'}.`,
             icon: '',
           });
         }
-        showToast(`<strong>New lead!</strong> ${esc(newest.name)} — ${esc(newest.business||'no business')}`,'★');
-        leads = data.map(normLead);
-        renderAll();
+        if (newest) showToast(`<strong>New lead!</strong> ${esc(newest.name||'—')} — ${esc(newest.business||'no business')}`,'★');
+        leads = data.map(normLead).filter(Boolean);
+        try { renderAll(); } catch(e) { console.error('Poll render error:', e); }
       }
       lastLeadCount = newCount;
     } catch {}
-  }, 30000); // poll every 30s
+  }, 30000);
 }
 
 /* ══════════════════════════════════════════════════
@@ -1522,9 +1607,12 @@ async function addSampleLead() {
     addons:JSON.stringify(addons) };
   try {
     const ins = await sbInsert(lead);
-    if (ins) { leads.unshift(normLead(ins)); lastLeadCount = leads.length; }
+    const normed = ins ? normLead(ins) : null;
+    if (normed) { leads.unshift(normed); lastLeadCount = leads.length; }
+    else { leads.unshift({...lead,id:String(Date.now()),timestamp:new Date().toISOString(),addons,read:false}); lastLeadCount = leads.length; }
   } catch {
     leads.unshift({...lead,id:String(Date.now()),timestamp:new Date().toISOString(),addons,read:false});
+    lastLeadCount = leads.length;
   }
   renderAll();
   showToast(`<strong>Test lead added:</strong> ${esc(s[0])} from ${esc(s[1])}`,'✓');
