@@ -1068,23 +1068,54 @@ function updateNewBadge() {
 function initBulk() {
   document.getElementById('bulk-apply').addEventListener('click', () => {
     const s = document.getElementById('bulk-status-select').value;
-    if (!s || !selectedIds.size) return;
+    if (!s) { alert('Please select a status first.'); return; }
+    if (!selectedIds.size) return;
     const ids = [...selectedIds];
-    // Update locally first — instant, no waiting on Supabase
-    ids.forEach(id => { const l=leads.find(x=>x.id===id); if(l){ addActivity(id,`Status → ${s}`); l.status=s; } });
-    clearBulk(); renderAll();
-    // Fire-and-forget sync to Supabase with timeout
+    const count = ids.length;
+    const statusLabels = { new:'New', contacted:'Contacted', in_progress:'In Progress', won:'Won', lost:'Lost' };
+    // Update local state instantly
+    ids.forEach(id => {
+      const l = leads.find(x => x.id === id);
+      if (l) { l.status = s; addActivity(id, `Status → ${statusLabels[s]||s}`); }
+    });
+    // Clear selection and re-render
+    selectedIds.clear();
+    document.getElementById('select-all').checked = false;
+    document.getElementById('bulk-status-select').value = '';
+    document.getElementById('bulk-bar').classList.remove('show');
+    applyFilters();
+    renderLeadsTable();
+    renderDashboard();
+    updateNewBadge();
+    showToast(`<strong>${count} lead${count>1?'s':''}</strong> marked as ${statusLabels[s]||s}`, '✓');
+    // Background sync
     sbBulkUpdate(ids, { status: s }).catch(() => {});
   });
+
   document.getElementById('bulk-delete').addEventListener('click', () => {
     if (!selectedIds.size) return;
-    if (!confirm(`Delete ${selectedIds.size} lead(s)?`)) return;
+    const count = selectedIds.size;
+    if (!confirm(`Delete ${count} lead${count>1?'s':''}? This cannot be undone.`)) return;
     const ids = [...selectedIds];
     leads = leads.filter(l => !ids.includes(l.id));
-    clearBulk(); renderAll();
+    selectedIds.clear();
+    document.getElementById('select-all').checked = false;
+    document.getElementById('bulk-bar').classList.remove('show');
+    applyFilters();
+    renderLeadsTable();
+    renderDashboard();
+    updateNewBadge();
+    showToast(`<strong>${count} lead${count>1?'s':''}</strong> deleted`, '✗');
     sbBulkDelete(ids).catch(() => {});
   });
-  document.getElementById('bulk-cancel').addEventListener('click', clearBulk);
+
+  document.getElementById('bulk-cancel').addEventListener('click', () => {
+    selectedIds.clear();
+    document.getElementById('select-all').checked = false;
+    document.getElementById('bulk-status-select').value = '';
+    document.getElementById('bulk-bar').classList.remove('show');
+    renderLeadsTable();
+  });
 }
 
 function updateBulkBar() {
