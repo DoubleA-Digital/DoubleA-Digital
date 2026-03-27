@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin — Double-A Digital</title>
+  <title>Admin v4 — Double-A Digital</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -1066,19 +1066,18 @@ function updateNewBadge() {
    BULK ACTIONS
 ══════════════════════════════════════════════════ */
 function initBulk() {
-  document.getElementById('bulk-apply').addEventListener('click', () => {
-    const s = document.getElementById('bulk-status-select').value;
-    if (!s) { alert('Please select a status first.'); return; }
-    if (!selectedIds.size) return;
-    const ids = [...selectedIds];
-    const count = ids.length;
-    const statusLabels = { new:'New', contacted:'Contacted', in_progress:'In Progress', won:'Won', lost:'Lost' };
-    // Update local state instantly
-    ids.forEach(id => {
-      const l = leads.find(x => x.id === id);
-      if (l) { l.status = s; addActivity(id, `Status → ${statusLabels[s]||s}`); }
+  document.getElementById('bulk-apply').addEventListener('click', function() {
+    var s = document.getElementById('bulk-status-select').value;
+    if (!s || selectedIds.size === 0) return;
+    // Update every selected lead's status directly
+    selectedIds.forEach(function(id) {
+      for (var i = 0; i < leads.length; i++) {
+        if (String(leads[i].id) === String(id)) {
+          leads[i].status = s;
+          break;
+        }
+      }
     });
-    // Clear selection and re-render
     selectedIds.clear();
     document.getElementById('select-all').checked = false;
     document.getElementById('bulk-status-select').value = '';
@@ -1087,17 +1086,15 @@ function initBulk() {
     renderLeadsTable();
     renderDashboard();
     updateNewBadge();
-    showToast(`<strong>${count} lead${count>1?'s':''}</strong> marked as ${statusLabels[s]||s}`, '✓');
-    // Background sync
-    sbBulkUpdate(ids, { status: s }).catch(() => {});
+    // Background Supabase sync — doesn't affect UI
+    try { sbBulkUpdate([...selectedIds], { status: s }).catch(function(){}); } catch(e) {}
   });
 
-  document.getElementById('bulk-delete').addEventListener('click', () => {
-    if (!selectedIds.size) return;
-    const count = selectedIds.size;
-    if (!confirm(`Delete ${count} lead${count>1?'s':''}? This cannot be undone.`)) return;
-    const ids = [...selectedIds];
-    leads = leads.filter(l => !ids.includes(l.id));
+  document.getElementById('bulk-delete').addEventListener('click', function() {
+    if (selectedIds.size === 0) return;
+    if (!confirm('Delete ' + selectedIds.size + ' lead(s)?')) return;
+    var ids = [...selectedIds];
+    leads = leads.filter(function(l) { return !ids.includes(String(l.id)); });
     selectedIds.clear();
     document.getElementById('select-all').checked = false;
     document.getElementById('bulk-bar').classList.remove('show');
@@ -1105,11 +1102,10 @@ function initBulk() {
     renderLeadsTable();
     renderDashboard();
     updateNewBadge();
-    showToast(`<strong>${count} lead${count>1?'s':''}</strong> deleted`, '✗');
-    sbBulkDelete(ids).catch(() => {});
+    try { sbBulkDelete(ids).catch(function(){}); } catch(e) {}
   });
 
-  document.getElementById('bulk-cancel').addEventListener('click', () => {
+  document.getElementById('bulk-cancel').addEventListener('click', function() {
     selectedIds.clear();
     document.getElementById('select-all').checked = false;
     document.getElementById('bulk-status-select').value = '';
