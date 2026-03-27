@@ -100,7 +100,8 @@ input, textarea, select { font-family: var(--font-body); }
   gap: 10px;
   flex-shrink: 0;
   text-decoration: none;
-  margin-left: 12px;
+  padding-right: 28px;
+  border-right: 1px solid rgba(255,255,255,0.1);
 }
 
 .logo-aa {
@@ -205,7 +206,8 @@ input, textarea, select { font-family: var(--font-body); }
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-right: 12px;
+  padding-left: 28px;
+  border-left: 1px solid rgba(255,255,255,0.1);
 }
 
 /* Hamburger */
