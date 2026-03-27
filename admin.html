@@ -657,8 +657,14 @@ let lastLeadCount = 0;
 ══════════════════════════════════════════════════ */
 const sbH = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' };
 
+function sbFetchWithTimeout(url, opts={}, ms=6000) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), ms);
+  return fetch(url, { ...opts, signal: ctrl.signal }).finally(() => clearTimeout(t));
+}
+
 async function sbFetch() {
-  const r = await fetch(`${SB_URL}/rest/v1/leads?select=*&order=created_at.desc`, { headers: sbH });
+  const r = await sbFetchWithTimeout(`${SB_URL}/rest/v1/leads?select=*&order=created_at.desc`, { headers: sbH });
   if (!r.ok) throw new Error('Supabase ' + r.status);
   const data = await r.json();
   if (!Array.isArray(data)) throw new Error('Unexpected response');
@@ -668,20 +674,20 @@ async function sbUpdate(id, data) {
   const b = { ...data };
   if (Array.isArray(b.addons)) b.addons = JSON.stringify(b.addons);
   if (typeof b.read === 'boolean') b.read = String(b.read);
-  await fetch(`${SB_URL}/rest/v1/leads?id=eq.${id}`, { method:'PATCH', headers:{...sbH,'Prefer':'return=minimal'}, body:JSON.stringify(b) });
+  await sbFetchWithTimeout(`${SB_URL}/rest/v1/leads?id=eq.${id}`, { method:'PATCH', headers:{...sbH,'Prefer':'return=minimal'}, body:JSON.stringify(b) });
 }
 async function sbDelete(id) {
-  await fetch(`${SB_URL}/rest/v1/leads?id=eq.${id}`, { method:'DELETE', headers:sbH });
+  await sbFetchWithTimeout(`${SB_URL}/rest/v1/leads?id=eq.${id}`, { method:'DELETE', headers:sbH });
 }
 async function sbInsert(data) {
   const b = { ...data };
   if (Array.isArray(b.addons)) b.addons = JSON.stringify(b.addons);
   if (typeof b.read === 'boolean') b.read = String(b.read);
-  const r = await fetch(`${SB_URL}/rest/v1/leads`, { method:'POST', headers:{...sbH,'Prefer':'return=representation'}, body:JSON.stringify(b) });
+  const r = await sbFetchWithTimeout(`${SB_URL}/rest/v1/leads`, { method:'POST', headers:{...sbH,'Prefer':'return=representation'}, body:JSON.stringify(b) });
   return (await r.json())[0];
 }
 async function sbClearAll() {
-  await fetch(`${SB_URL}/rest/v1/leads?id=gt.0`, { method:'DELETE', headers:sbH });
+  await sbFetchWithTimeout(`${SB_URL}/rest/v1/leads?id=gt.0`, { method:'DELETE', headers:sbH });
 }
 async function sbBulkUpdate(ids, data) {
   await Promise.all(ids.map(id => sbUpdate(id, data)));
@@ -1060,27 +1066,23 @@ function updateNewBadge() {
    BULK ACTIONS
 ══════════════════════════════════════════════════ */
 function initBulk() {
-  document.getElementById('bulk-apply').addEventListener('click', async () => {
+  document.getElementById('bulk-apply').addEventListener('click', () => {
     const s = document.getElementById('bulk-status-select').value;
     if (!s || !selectedIds.size) return;
     const ids = [...selectedIds];
-    const btn = document.getElementById('bulk-apply');
-    btn.textContent = 'Saving…'; btn.disabled = true;
-    // Update local state immediately so UI feels instant
-    ids.forEach(id => { const l=leads.find(x=>x.id===id); if(l){ addActivity(id,`Status changed to ${s}`); l.status=s; } });
+    // Update locally first — instant, no waiting on Supabase
+    ids.forEach(id => { const l=leads.find(x=>x.id===id); if(l){ addActivity(id,`Status → ${s}`); l.status=s; } });
     clearBulk(); renderAll();
-    // Sync to Supabase in background
-    try { await sbBulkUpdate(ids, { status: s }); } catch(e) { console.warn('Bulk update sync failed:', e); }
-    btn.textContent = 'Apply'; btn.disabled = false;
+    // Fire-and-forget sync to Supabase with timeout
+    sbBulkUpdate(ids, { status: s }).catch(() => {});
   });
-  document.getElementById('bulk-delete').addEventListener('click', async () => {
+  document.getElementById('bulk-delete').addEventListener('click', () => {
     if (!selectedIds.size) return;
     if (!confirm(`Delete ${selectedIds.size} lead(s)?`)) return;
     const ids = [...selectedIds];
-    // Remove locally first for instant feedback
     leads = leads.filter(l => !ids.includes(l.id));
     clearBulk(); renderAll();
-    try { await sbBulkDelete(ids); } catch(e) { console.warn('Bulk delete sync failed:', e); }
+    sbBulkDelete(ids).catch(() => {});
   });
   document.getElementById('bulk-cancel').addEventListener('click', clearBulk);
 }
