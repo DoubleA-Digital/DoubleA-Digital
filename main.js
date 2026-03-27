@@ -195,7 +195,7 @@ function injectContactOverlay() {
           </div>
           <div>
             <h4>Business Email</h4>
-            <a href="mailto:hello@double-adigital.com">hello@double-adigital.com</a>
+            <a href="mailto:doubleadigital324@gmail.com">doubleadigital324@gmail.com</a>
           </div>
         </div>
 
@@ -317,13 +317,39 @@ function injectContactOverlay() {
       const btn = form.querySelector('button[type="submit"]');
       btn.textContent = 'Sending...';
       btn.disabled = true;
-      setTimeout(() => {
+      const leadData = {
+        source: 'contact',
+        name:     document.getElementById('c-name').value.trim(),
+        business: document.getElementById('c-biz').value.trim(),
+        email:    document.getElementById('c-email').value.trim(),
+        phone:    document.getElementById('c-phone').value.trim(),
+        service:  document.getElementById('c-service').value,
+        budget:   document.getElementById('c-budget').value || '',
+        message:  document.getElementById('c-msg').value.trim(),
+      };
+      saveLead(leadData);
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          access_key: '4f03cec7-0a89-4cc3-bd5f-f8957d744e43',
+          subject: `New Contact Form — ${leadData.name} (${leadData.business})`,
+          from_name: 'Double-A Digital Website',
+          name:     leadData.name,
+          email:    leadData.email,
+          phone:    leadData.phone || 'Not provided',
+          business: leadData.business,
+          service:  leadData.service,
+          budget:   leadData.budget || 'Not provided',
+          message:  leadData.message,
+        }),
+      }).finally(() => {
         form.reset();
         btn.textContent = 'Send it →';
         btn.disabled = false;
         document.getElementById('contact-success').style.display = 'block';
         setTimeout(() => document.getElementById('contact-success').style.display = 'none', 5000);
-      }, 1200);
+      });
     }
   });
 }
@@ -544,15 +570,43 @@ function submitDemoStep2() {
   const pages    = document.getElementById('chk-pages').checked;
   const pagesCt  = parseInt(document.getElementById('extra-pages-count').value) || 0;
 
+  const addons = [];
+  if (rush)                   addons.push('Rush delivery (+$249)');
+  if (pages && pagesCt > 0)   addons.push(`${pagesCt} extra page${pagesCt > 1 ? 's' : ''} (+$${pagesCt * 25})`);
+  if (logo)                   addons.push('Logo design (free)');
+  if (social)                 addons.push('Social media kit (free)');
+
+  const demoData = {
+    source:   'demo',
+    name:     document.getElementById('d-name').value.trim(),
+    business: document.getElementById('d-biz').value.trim(),
+    email:    document.getElementById('d-email').value.trim(),
+    phone:    document.getElementById('d-phone').value.trim(),
+    btype:    document.getElementById('d-type').value || '',
+    plan,
+    addons,
+  };
+  saveLead(demoData);
+  fetch('https://api.web3forms.com/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      access_key: '4f03cec7-0a89-4cc3-bd5f-f8957d744e43',
+      subject: `New Demo Request — ${demoData.name} (${demoData.business}) · ${plan}`,
+      from_name: 'Double-A Digital Website',
+      name:     demoData.name,
+      email:    demoData.email,
+      phone:    demoData.phone || 'Not provided',
+      business: demoData.business,
+      industry: demoData.btype || 'Not provided',
+      plan:     plan,
+      addons:   addons.length ? addons.join(', ') : 'None',
+    }),
+  });
+
   document.getElementById('confirm-name').textContent = name;
 
-  const items = [];
-  items.push(`Plan: ${plan}`);
-  if (rush)  items.push('Rush delivery (+$249)');
-  if (pages && pagesCt > 0) items.push(`${pagesCt} extra page${pagesCt > 1 ? 's' : ''} (+$${pagesCt * 25})`);
-  if (logo)  items.push('Logo design (free)');
-  if (social) items.push('Social media kit (free)');
-
+  const items = [`Plan: ${plan}`, ...addons];
   const list = document.getElementById('confirm-list');
   list.innerHTML = items.map(i => `<li>${i}</li>`).join('');
   showDemoStep(3);
@@ -599,6 +653,25 @@ document.addEventListener('keydown', e => {
     if (mob) { mob.classList.remove('open'); ham.classList.remove('open'); document.body.style.overflow = ''; }
   }
 });
+
+/* =====================================================
+   LEAD STORAGE
+   ===================================================== */
+function saveLead(data) {
+  const leads = JSON.parse(localStorage.getItem('daa_leads') || '[]');
+  leads.unshift({
+    id: Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+    timestamp: new Date().toISOString(),
+    status: 'new',
+    read: false,
+    notes: '',
+    name: '', business: '', email: '', phone: '',
+    service: '', budget: '', message: '',
+    plan: '', btype: '', addons: [],
+    ...data,
+  });
+  localStorage.setItem('daa_leads', JSON.stringify(leads));
+}
 
 /* =====================================================
    FORM VALIDATION

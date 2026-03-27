@@ -57,7 +57,7 @@
           <div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
           <div>
             <h4>Business Email</h4>
-            <a href="mailto:hello@double-adigital.com">hello@double-adigital.com</a>
+            <a href="mailto:doubleadigital324@gmail.com">doubleadigital324@gmail.com</a>
           </div>
         </div>
         <div class="contact-info-item">
@@ -172,7 +172,7 @@
       </div>
       <div class="footer-col"><h4>Pages</h4><a href="index.html">Home</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="work.html">Our Work</a><a href="about.html">About</a></div>
       <div class="footer-col"><h4>Services</h4><a href="services.html">Website Design</a><a href="services.html">Web App Dev</a><a href="services.html">E-Commerce</a><a href="services.html">Maintenance</a></div>
-      <div class="footer-col"><h4>Contact</h4><a href="mailto:hello@double-adigital.com">hello@double-adigital.com</a><p style="color:var(--muted);font-size:0.82rem;margin-top:10px;">Simi Valley, CA</p></div>
+      <div class="footer-col"><h4>Contact</h4><a href="mailto:doubleadigital324@gmail.com">doubleadigital324@gmail.com</a><p style="color:var(--muted);font-size:0.82rem;margin-top:10px;">Simi Valley, CA</p></div>
     </div>
     <div class="footer-bottom"><p>© 2025 Double-A Digital. Built by Aarush &amp; Ajay.</p><p>Simi Valley, California</p></div>
   </div>
@@ -180,7 +180,6 @@
 
 <script src="main.js"></script>
 <script>
-  // Standalone form validation
   const scForm = document.getElementById('standalone-contact-form');
   if (scForm) {
     scForm.addEventListener('submit', e => {
@@ -195,11 +194,43 @@
       if (valid) {
         const btn = scForm.querySelector('button[type="submit"]');
         btn.textContent = 'Sending...'; btn.disabled = true;
-        setTimeout(() => {
+        // Save to localStorage for admin portal
+        const leads = JSON.parse(localStorage.getItem('daa_leads') || '[]');
+        leads.unshift({
+          id: Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+          timestamp: new Date().toISOString(),
+          status: 'new', read: false, notes: '',
+          source:   'contact',
+          name:     scForm.querySelector('#sc-name').value.trim(),
+          business: scForm.querySelector('#sc-biz').value.trim(),
+          email:    scForm.querySelector('#sc-email').value.trim(),
+          phone:    scForm.querySelector('#sc-phone').value.trim(),
+          service:  scForm.querySelector('#sc-service').value,
+          budget:   scForm.querySelector('#sc-budget').value || '',
+          message:  scForm.querySelector('#sc-msg').value.trim(),
+          plan: '', btype: '', addons: [],
+        });
+        localStorage.setItem('daa_leads', JSON.stringify(leads));
+        fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            access_key: '4f03cec7-0a89-4cc3-bd5f-f8957d744e43',
+            subject: `New Contact Form — ${scForm.querySelector('#sc-name').value.trim()} (${scForm.querySelector('#sc-biz').value.trim()})`,
+            from_name: 'Double-A Digital Website',
+            name:     scForm.querySelector('#sc-name').value.trim(),
+            email:    scForm.querySelector('#sc-email').value.trim(),
+            phone:    scForm.querySelector('#sc-phone').value.trim() || 'Not provided',
+            business: scForm.querySelector('#sc-biz').value.trim(),
+            service:  scForm.querySelector('#sc-service').value,
+            budget:   scForm.querySelector('#sc-budget').value || 'Not provided',
+            message:  scForm.querySelector('#sc-msg').value.trim(),
+          }),
+        }).finally(() => {
           scForm.reset(); btn.textContent = 'Send it →'; btn.disabled = false;
           document.getElementById('sc-success').style.display = 'block';
           setTimeout(() => document.getElementById('sc-success').style.display = 'none', 5000);
-        }, 1200);
+        });
       }
     });
   }
