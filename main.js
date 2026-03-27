@@ -655,22 +655,47 @@ document.addEventListener('keydown', e => {
 });
 
 /* =====================================================
+   SUPABASE CONFIG
+   ===================================================== */
+const _SB_URL = 'https://xciutykxroltvqdcpatb.supabase.co';
+const _SB_KEY = 'sb_publishable__jUL4uDZrhi1eTTXkDp09g_pRuPluZ7';
+
+/* =====================================================
    LEAD STORAGE
    ===================================================== */
 function saveLead(data) {
+  // Keep localStorage as local backup
   const leads = JSON.parse(localStorage.getItem('daa_leads') || '[]');
   leads.unshift({
     id: Date.now() + '-' + Math.random().toString(36).slice(2, 7),
     timestamp: new Date().toISOString(),
-    status: 'new',
-    read: false,
-    notes: '',
+    status: 'new', read: false, notes: '',
     name: '', business: '', email: '', phone: '',
     service: '', budget: '', message: '',
     plan: '', btype: '', addons: [],
     ...data,
   });
   localStorage.setItem('daa_leads', JSON.stringify(leads));
+
+  // Save to Supabase (shared across all devices)
+  const body = {
+    status: 'new', read: 'false', notes: '',
+    name: '', business: '', email: '', phone: '',
+    service: '', budget: '', message: '',
+    plan: '', btype: '', addons: '[]',
+    ...data,
+    addons: JSON.stringify(Array.isArray(data.addons) ? data.addons : []),
+  };
+  fetch(`${_SB_URL}/rest/v1/leads`, {
+    method: 'POST',
+    headers: {
+      'apikey': _SB_KEY,
+      'Authorization': `Bearer ${_SB_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal',
+    },
+    body: JSON.stringify(body),
+  });
 }
 
 /* =====================================================
