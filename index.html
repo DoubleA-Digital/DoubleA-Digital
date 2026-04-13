@@ -9,6 +9,29 @@
   <meta property="og:description" content="Custom digital experiences for local businesses. Fast, clean, built to convert.">
   <meta property="og:type" content="website">
   <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Double-A Digital",
+    "url": "https://www.double-adigital.com",
+    "description": "Simi Valley studio building custom websites and web apps for local businesses.",
+    "email": "doubleadigital324@gmail.com",
+    "telephone": "+1-805-284-1628",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Simi Valley",
+      "addressRegion": "CA",
+      "addressCountry": "US"
+    },
+    "areaServed": ["Simi Valley", "Ventura County", "Los Angeles County"],
+    "makesOffer": [
+      {"@type": "Offer", "name": "Website Design & Development", "priceCurrency": "USD", "price": "500"},
+      {"@type": "Offer", "name": "Web App Development", "priceCurrency": "USD"},
+      {"@type": "Offer", "name": "E-Commerce Development", "priceCurrency": "USD"}
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -34,6 +57,7 @@
     </div>
     <div class="nav-right">
       <button class="btn btn-primary btn-sm" data-demo>Get a free demo</button>
+      <a class="btn btn-outline btn-sm" data-book>Book a call</a>
       <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -48,6 +72,7 @@
   <a href="about.html">About</a>
   <a href="contact.html" data-contact>Contact</a>
   <button class="btn btn-primary" data-demo style="margin-top:8px;">Get a free demo</button>
+  <a class="btn btn-outline" data-book>Book a call</a>
 </div>
 
 <!-- ================================================
@@ -80,6 +105,7 @@
       <div class="hero-ctas reveal d2">
         <a href="work.html" class="btn btn-outline">See our work</a>
         <button class="btn btn-primary" data-demo>Get a free demo</button>
+        <a class="btn btn-outline" data-book>Book a 15-min call</a>
       </div>
     </div>
   </div>
@@ -87,6 +113,39 @@
   <div class="hero-scroll">
     <span>Scroll</span>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</section>
+
+<!-- ================================================
+     TRUST / TESTIMONIALS
+     ================================================ -->
+<section class="sec sec-dark-2">
+  <div class="wrap">
+    <div class="sec-header centered reveal">
+      <p class="label-line label-line-center" style="color:var(--accent);">Proof</p>
+      <h2 class="h-md mt-16">Real outcomes for local businesses.</h2>
+      <p class="body-lg muted mt-24">Every quote below comes from a live project process with Double-A Digital.</p>
+    </div>
+    <div class="grid-3 mt-48">
+      <div class="trust-card reveal d1">
+        <p class="trust-quote">"We were getting almost no online reservations. Two months after launch, they tripled."</p>
+        <p class="trust-meta">Rosario's Italian Kitchen · Simi Valley</p>
+      </div>
+      <div class="trust-card reveal d2">
+        <p class="trust-quote">"The booking flow finally makes sense for our clients on mobile."</p>
+        <p class="trust-meta">Sowmith Cuts · Ventura County</p>
+      </div>
+      <div class="trust-card reveal d3">
+        <p class="trust-quote">"Fast turnaround, clear communication, and we own everything after launch."</p>
+        <p class="trust-meta">Local Service Business · Growth Plan</p>
+      </div>
+    </div>
+    <div class="results-strip reveal mt-48">
+      <div><strong>3x</strong><span>Reservation increase in 60 days</span></div>
+      <div><strong>2s</strong><span>Typical load time target</span></div>
+      <div><strong>24h</strong><span>Reply window for new leads</span></div>
+      <div><strong>100%</strong><span>You own your code and domain</span></div>
+    </div>
   </div>
 </section>
 
@@ -143,6 +202,34 @@
 
     <div class="t-center mt-48 reveal">
       <a href="services.html" class="btn btn-outline">View all services</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     GUARANTEE
+     ================================================ -->
+<section class="sec sec-dark">
+  <div class="wrap">
+    <div class="guarantee-box reveal">
+      <p class="label-line">Our guarantee</p>
+      <h2 class="h-sm mt-16">Clear process. No lock-in. No guesswork.</h2>
+      <div class="grid-2 mt-32">
+        <ul class="feat-list">
+          <li>Free working demo before any payment</li>
+          <li>Written timeline before build starts</li>
+          <li>Defined revisions by plan, unlimited on Pro</li>
+        </ul>
+        <ul class="feat-list">
+          <li>Launch checklist for SEO + analytics setup</li>
+          <li>Support response target within 1 business day</li>
+          <li>You keep the code, domain, and hosting access</li>
+        </ul>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;">
+        <button class="btn btn-primary" data-demo>Start with a free demo</button>
+        <a class="btn btn-outline" data-book>Book a 15-min call</a>
+      </div>
     </div>
   </div>
 </section>
@@ -325,9 +412,9 @@
         </div>
         <p>A Simi Valley studio building websites and apps for local businesses. Fast, clean, and built to last.</p>
         <div class="socials" style="margin-top:20px;">
-          <a href="#" class="soc-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
-          <a href="#" class="soc-icon" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-          <a href="#" class="soc-icon" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener" class="soc-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://www.linkedin.com/" target="_blank" rel="noopener" class="soc-icon" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="https://github.com/" target="_blank" rel="noopener" class="soc-icon" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
         </div>
       </div>
       <div class="footer-col">

@@ -1699,6 +1699,70 @@ input, textarea, select { font-family: var(--font-body); }
 .confirm-summary li::before { content: '✓'; color: var(--accent); font-weight: 800; flex-shrink: 0; }
 
 /* =====================================================
+   TRUST + GUARANTEE
+   ===================================================== */
+.trust-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--r-lg);
+  padding: 24px;
+}
+.trust-quote {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.02rem;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+}
+.trust-meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 14px;
+}
+.results-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.results-strip > div {
+  border: 1px solid var(--border-dark);
+  border-radius: var(--r);
+  padding: 16px 14px;
+  background: rgba(255,255,255,0.02);
+}
+.results-strip strong {
+  display: block;
+  font-family: var(--font-head);
+  font-size: 1.35rem;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+.results-strip span {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.guarantee-box {
+  border: 1px solid var(--border-dark);
+  border-radius: var(--r-lg);
+  padding: 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+}
+
+/* Form reliability UI */
+.form-error {
+  display: none;
+  margin-top: 10px;
+  font-size: 0.82rem;
+  color: #ff6f7c;
+}
+.hp-field {
+  position: absolute !important;
+  left: -9999px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* =====================================================
    BUSINESS CARD (about page)
    ===================================================== */
 .bcard-wrap { display: flex; flex-direction: column; gap: 18px; max-width: 500px; }
@@ -1792,6 +1856,7 @@ input, textarea, select { font-family: var(--font-body); }
   .col-left { border-radius: var(--r-xl) var(--r-xl) 0 0; padding: 40px 36px; }
   .col-right { border-radius: 0 0 var(--r-xl) var(--r-xl); padding: 40px 36px; }
   .stats-row { grid-template-columns: repeat(2,1fr); }
+  .results-strip { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 768px) {
@@ -1828,6 +1893,7 @@ input, textarea, select { font-family: var(--font-body); }
   .proof-divider { display: none; }
   .proof-icons { justify-content: flex-start; }
   .hero-ctas { flex-direction: column; align-items: flex-start; }
+  .results-strip { grid-template-columns: 1fr; }
 
   /* Contact */
   .contact-split { grid-template-columns: 1fr; }

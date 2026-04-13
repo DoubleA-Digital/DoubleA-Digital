@@ -8,10 +8,14 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
   initActiveNav();
   injectModals();
+  wireBookTriggers();
   initScrollReveal();
   initFAQ();
   initPortfolioFilter();
   initSmoothScroll();
+  initConversionTracking();
+  initStandaloneContactForm();
+  flushPendingLeadQueue();
 });
 
 /* =====================================================
@@ -228,10 +232,10 @@ function injectContactOverlay() {
         </div>
 
         <div class="socials" style="margin-top:24px;">
-          <a href="#" class="soc-icon" aria-label="Instagram">
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener" class="soc-icon" aria-label="Instagram">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
           </a>
-          <a href="#" class="soc-icon" aria-label="LinkedIn">
+          <a href="https://www.linkedin.com/" target="_blank" rel="noopener" class="soc-icon" aria-label="LinkedIn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
           </a>
         </div>
@@ -293,7 +297,9 @@ function injectContactOverlay() {
             <textarea id="c-msg" name="message" placeholder="Tell us about your business and what you're looking for..." required></textarea>
             <span class="err-msg">Required</span>
           </div>
+          <input type="text" name="company_website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
           <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:4px;">Send it →</button>
+          <div class="form-error" id="contact-error">Could not send right now. We saved your request and will retry automatically.</div>
           <div class="form-success" id="contact-success">Message sent! We'll be in touch within 24 hours.</div>
         </form>
       </div>
@@ -311,10 +317,16 @@ function injectContactOverlay() {
 
   // Form
   const form = document.getElementById('contact-form');
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
+    const hp = form.querySelector('input[name="company_website"]');
+    if (hp && hp.value.trim()) return;
     if (validateForm(form)) {
       const btn = form.querySelector('button[type="submit"]');
+      const errorEl = document.getElementById('contact-error');
+      const successEl = document.getElementById('contact-success');
+      if (errorEl) errorEl.style.display = 'none';
+      if (successEl) successEl.style.display = 'none';
       btn.textContent = 'Sending...';
       btn.disabled = true;
       const leadData = {
@@ -327,29 +339,23 @@ function injectContactOverlay() {
         budget:   document.getElementById('c-budget').value || '',
         message:  document.getElementById('c-msg').value.trim(),
       };
-      saveLead(leadData);
-      fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          access_key: '4f03cec7-0a89-4cc3-bd5f-f8957d744e43',
-          subject: `New Contact Form — ${leadData.name} (${leadData.business})`,
-          from_name: 'Double-A Digital Website',
-          name:     leadData.name,
-          email:    leadData.email,
-          phone:    leadData.phone || 'Not provided',
-          business: leadData.business,
-          service:  leadData.service,
-          budget:   leadData.budget || 'Not provided',
-          message:  leadData.message,
-        }),
-      }).finally(() => {
-        form.reset();
-        btn.textContent = 'Send it →';
-        btn.disabled = false;
-        document.getElementById('contact-success').style.display = 'block';
-        setTimeout(() => document.getElementById('contact-success').style.display = 'none', 5000);
+      const sent = await submitLead(leadData, {
+        subject: `New Contact Form — ${leadData.name} (${leadData.business})`,
+        service: leadData.service,
+        budget: leadData.budget || 'Not provided',
+        message: leadData.message,
       });
+      form.reset();
+      btn.textContent = 'Send it →';
+      btn.disabled = false;
+      if (sent) {
+        if (successEl) {
+          successEl.style.display = 'block';
+          setTimeout(() => successEl.style.display = 'none', 5000);
+        }
+      } else if (errorEl) {
+        errorEl.style.display = 'block';
+      }
     }
   });
 }
@@ -439,6 +445,7 @@ function injectDemoModal() {
               <option value="Not sure">Not sure yet</option>
             </select>
           </div>
+          <input type="text" name="company_website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="demo-nav">
             <span></span>
             <button type="submit" class="btn btn-primary">Next →</button>
@@ -491,9 +498,10 @@ function injectDemoModal() {
           <span class="addon-price-tag addon-free">Free</span>
         </label>
 
+        <div class="form-error" id="demo-error" style="margin-top:14px;">Could not send right now. We saved your request and will retry automatically.</div>
         <div class="demo-nav">
           <button class="btn-back" id="demo-back-1">← Back</button>
-          <button class="btn btn-primary" id="demo-submit">Submit Request →</button>
+          <button class="btn btn-primary" id="demo-submit" data-track="demo_submit_click">Submit Request →</button>
         </div>
       </div>
 
@@ -526,7 +534,10 @@ function injectDemoModal() {
   // Step 1 submit
   document.getElementById('demo-form-1').addEventListener('submit', e => {
     e.preventDefault();
+    const hp = document.querySelector('#demo-form-1 input[name="company_website"]');
+    if (hp && hp.value.trim()) return;
     if (validateForm(document.getElementById('demo-form-1'))) {
+      trackEvent('demo_form_step1_valid');
       showDemoStep(2);
     }
   });
@@ -561,7 +572,15 @@ function showDemoStep(n) {
   document.getElementById(`demo-step-${n}`).classList.add('active');
 }
 
-function submitDemoStep2() {
+async function submitDemoStep2() {
+  const submitBtn = document.getElementById('demo-submit');
+  const errorEl = document.getElementById('demo-error');
+  if (errorEl) errorEl.style.display = 'none';
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+  }
+
   const name     = document.getElementById('d-name').value.trim().split(' ')[0] || 'there';
   const plan     = document.getElementById('d-plan').value || 'Not selected';
   const rush     = document.getElementById('chk-rush').checked;
@@ -586,29 +605,23 @@ function submitDemoStep2() {
     plan,
     addons,
   };
-  saveLead(demoData);
-  fetch('https://api.web3forms.com/submit', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      access_key: '4f03cec7-0a89-4cc3-bd5f-f8957d744e43',
-      subject: `New Demo Request — ${demoData.name} (${demoData.business}) · ${plan}`,
-      from_name: 'Double-A Digital Website',
-      name:     demoData.name,
-      email:    demoData.email,
-      phone:    demoData.phone || 'Not provided',
-      business: demoData.business,
-      industry: demoData.btype || 'Not provided',
-      plan:     plan,
-      addons:   addons.length ? addons.join(', ') : 'None',
-    }),
+  const sent = await submitLead(demoData, {
+    subject: `New Demo Request — ${demoData.name} (${demoData.business}) · ${plan}`,
+    industry: demoData.btype || 'Not provided',
+    plan,
+    addons: addons.length ? addons.join(', ') : 'None',
   });
+  if (!sent && errorEl) errorEl.style.display = 'block';
 
   document.getElementById('confirm-name').textContent = name;
 
   const items = [`Plan: ${plan}`, ...addons];
   const list = document.getElementById('confirm-list');
   list.innerHTML = items.map(i => `<li>${i}</li>`).join('');
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Request →';
+  }
   showDemoStep(3);
 }
 
@@ -640,6 +653,16 @@ function wireDemoTriggers() {
   });
 }
 
+function wireBookTriggers() {
+  const BOOK_URL = 'https://calendly.com/doubleadigital324/15min';
+  document.querySelectorAll('[data-book]').forEach(el => {
+    el.setAttribute('href', BOOK_URL);
+    el.setAttribute('target', '_blank');
+    el.setAttribute('rel', 'noopener noreferrer');
+    el.addEventListener('click', () => trackEvent('book_call_click', { label: el.textContent.trim() }));
+  });
+}
+
 /* =====================================================
    ESCAPE KEY — close any open modal
    ===================================================== */
@@ -659,12 +682,108 @@ document.addEventListener('keydown', e => {
    ===================================================== */
 const _SB_URL = 'https://xciutykxroltvqdcpatb.supabase.co';
 const _SB_KEY = 'sb_publishable__jUL4uDZrhi1eTTXkDp09g_pRuPluZ7';
+const _WEB3_KEY = '4f03cec7-0a89-4cc3-bd5f-f8957d744e43';
+const _PENDING_KEY = 'daa_pending_leads';
 
 /* =====================================================
-   LEAD STORAGE
+   TRACKING + ATTRIBUTION
    ===================================================== */
+function initConversionTracking() {
+  document.querySelectorAll('[data-demo], [data-contact]').forEach(el => {
+    el.addEventListener('click', () => trackEvent('cta_click', { label: el.textContent.trim() }));
+  });
+  document.querySelectorAll('form').forEach(form => {
+    let started = false;
+    form.addEventListener('input', () => {
+      if (started) return;
+      started = true;
+      trackEvent('form_start', { form_id: form.id || 'unknown' });
+    });
+  });
+}
+
+function trackEvent(eventName, data = {}) {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: eventName, ...data, ts: Date.now() });
+}
+
+function getAttribution() {
+  const params = new URLSearchParams(window.location.search);
+  const keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'fbclid'];
+  const out = {};
+  keys.forEach(k => {
+    const v = params.get(k);
+    if (v) {
+      out[k] = v;
+      localStorage.setItem(`daa_${k}`, v);
+    } else {
+      const stored = localStorage.getItem(`daa_${k}`);
+      if (stored) out[k] = stored;
+    }
+  });
+  out.landing_page = window.location.pathname;
+  return out;
+}
+
+function queuePendingLead(payload) {
+  const pending = JSON.parse(localStorage.getItem(_PENDING_KEY) || '[]');
+  pending.push({ payload, queuedAt: new Date().toISOString() });
+  localStorage.setItem(_PENDING_KEY, JSON.stringify(pending.slice(-40)));
+}
+
+async function flushPendingLeadQueue() {
+  const pending = JSON.parse(localStorage.getItem(_PENDING_KEY) || '[]');
+  if (!pending.length) return;
+  const keep = [];
+  for (const item of pending) {
+    const ok = await postWeb3Forms(item.payload);
+    if (!ok) keep.push(item);
+  }
+  localStorage.setItem(_PENDING_KEY, JSON.stringify(keep));
+}
+
+/* =====================================================
+   LEAD STORAGE + DELIVERY
+   ===================================================== */
+async function submitLead(data, web3Extra = {}) {
+  const payload = { ...data, ...getAttribution() };
+  saveLead(payload);
+  const sent = await withRetry(() => postWeb3Forms({
+    subject: `New Lead — ${payload.name || 'Unknown'} (${payload.business || 'Unknown business'})`,
+    from_name: 'Double-A Digital Website',
+    name: payload.name || '',
+    email: payload.email || '',
+    phone: payload.phone || 'Not provided',
+    business: payload.business || '',
+    service: payload.service || 'Not provided',
+    budget: payload.budget || 'Not provided',
+    message: payload.message || '',
+    industry: payload.btype || 'Not provided',
+    plan: payload.plan || 'Not selected',
+    addons: Array.isArray(payload.addons) && payload.addons.length ? payload.addons.join(', ') : 'None',
+    ...web3Extra,
+  }), 2);
+
+  if (!sent) queuePendingLead({
+    subject: `Queued Lead Retry — ${payload.name || 'Unknown'} (${payload.business || 'Unknown business'})`,
+    from_name: 'Double-A Digital Website',
+    name: payload.name || '',
+    email: payload.email || '',
+    phone: payload.phone || 'Not provided',
+    business: payload.business || '',
+    service: payload.service || 'Not provided',
+    budget: payload.budget || 'Not provided',
+    message: payload.message || '',
+    industry: payload.btype || 'Not provided',
+    plan: payload.plan || 'Not selected',
+    addons: Array.isArray(payload.addons) && payload.addons.length ? payload.addons.join(', ') : 'None',
+  });
+
+  trackEvent(sent ? 'lead_submit_success' : 'lead_submit_queued', { source: payload.source || 'unknown' });
+  return sent;
+}
+
 function saveLead(data) {
-  // Keep localStorage as local backup
   const leads = JSON.parse(localStorage.getItem('daa_leads') || '[]');
   leads.unshift({
     id: Date.now() + '-' + Math.random().toString(36).slice(2, 7),
@@ -677,7 +796,6 @@ function saveLead(data) {
   });
   localStorage.setItem('daa_leads', JSON.stringify(leads));
 
-  // Save to Supabase (shared across all devices)
   const body = {
     status: 'new', read: 'false', notes: '',
     name: '', business: '', email: '', phone: '',
@@ -695,7 +813,31 @@ function saveLead(data) {
       'Prefer': 'return=minimal',
     },
     body: JSON.stringify(body),
-  });
+  }).catch(() => null);
+}
+
+async function postWeb3Forms(payload) {
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        access_key: _WEB3_KEY,
+        ...payload,
+      }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function withRetry(fn, retries = 1) {
+  for (let i = 0; i <= retries; i += 1) {
+    const ok = await fn();
+    if (ok) return true;
+  }
+  return false;
 }
 
 /* =====================================================
@@ -719,4 +861,46 @@ function validateForm(form) {
     }, { once: false });
   });
   return valid;
+}
+
+function initStandaloneContactForm() {
+  const scForm = document.getElementById('standalone-contact-form');
+  if (!scForm) return;
+  scForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const hp = scForm.querySelector('input[name="company_website"]');
+    if (hp && hp.value.trim()) return;
+    if (!validateForm(scForm)) return;
+
+    const btn = scForm.querySelector('button[type="submit"]');
+    const okEl = document.getElementById('sc-success');
+    const errEl = document.getElementById('sc-error');
+    if (okEl) okEl.style.display = 'none';
+    if (errEl) errEl.style.display = 'none';
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    const leadData = {
+      source: 'contact',
+      name: scForm.querySelector('#sc-name').value.trim(),
+      business: scForm.querySelector('#sc-biz').value.trim(),
+      email: scForm.querySelector('#sc-email').value.trim(),
+      phone: scForm.querySelector('#sc-phone').value.trim(),
+      service: scForm.querySelector('#sc-service').value,
+      budget: scForm.querySelector('#sc-budget').value || '',
+      message: scForm.querySelector('#sc-msg').value.trim(),
+    };
+    const sent = await submitLead(leadData, {
+      subject: `New Contact Form — ${leadData.name} (${leadData.business})`,
+    });
+
+    scForm.reset();
+    btn.textContent = 'Send it →';
+    btn.disabled = false;
+    if (sent && okEl) {
+      okEl.style.display = 'block';
+      setTimeout(() => okEl.style.display = 'none', 5000);
+    }
+    if (!sent && errEl) errEl.style.display = 'block';
+  });
 }

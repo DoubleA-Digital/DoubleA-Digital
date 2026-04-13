@@ -6,6 +6,26 @@
   <title>Contact — Double-A Digital</title>
   <meta name="description" content="Get in touch with Double-A Digital. Request a free website demo, ask questions, or reach us directly. Simi Valley, CA.">
   <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Double-A Digital",
+    "url": "https://www.double-adigital.com/contact.html",
+    "about": {
+      "@type": "LocalBusiness",
+      "name": "Double-A Digital",
+      "email": "doubleadigital324@gmail.com",
+      "telephone": "+1-805-284-1628",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Simi Valley",
+        "addressRegion": "CA",
+        "addressCountry": "US"
+      }
+    }
+  }
+  </script>
 </head>
 <body>
 <div class="cursor"></div>
@@ -27,6 +47,7 @@
     </div>
     <div class="nav-right">
       <button class="btn btn-primary btn-sm" data-demo>Get a free demo</button>
+      <a class="btn btn-outline btn-sm" data-book>Book a call</a>
       <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -35,6 +56,7 @@
   <a href="index.html">Home</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a>
   <a href="work.html">Our Work</a><a href="about.html">About</a><a href="contact.html">Contact</a>
   <button class="btn btn-primary" data-demo style="margin-top:8px;">Get a free demo</button>
+  <a class="btn btn-outline" data-book>Book a call</a>
 </div>
 
 <!-- STANDALONE CONTACT PAGE (full layout) -->
@@ -87,8 +109,8 @@
         </div>
 
         <div class="socials" style="margin-top:24px;">
-          <a href="#" class="soc-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
-          <a href="#" class="soc-icon" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener" class="soc-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://www.linkedin.com/" target="_blank" rel="noopener" class="soc-icon" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
         </div>
       </div>
     </div>
@@ -149,13 +171,18 @@
           <textarea id="sc-msg" name="message" placeholder="Tell us about your business and what you're looking for..." required></textarea>
           <span class="err-msg">Required</span>
         </div>
+        <input type="text" name="company_website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
         <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Send it →</button>
+        <div class="form-error" id="sc-error">Could not send right now. We saved your request and will retry automatically.</div>
         <div class="form-success" id="sc-success">Message sent! We'll be in touch within 24 hours. Talk soon.</div>
       </form>
 
       <div style="margin-top:32px;padding-top:28px;border-top:1px solid var(--border-light);text-align:center;">
         <p style="font-size:0.84rem;color:var(--muted-dark);margin-bottom:12px;">Or skip the form — get your free demo now</p>
-        <button class="btn btn-outline" style="color:var(--bg-dark);border-color:var(--bg-dark);" data-demo>Get a free demo →</button>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-outline" style="color:var(--bg-dark);border-color:var(--bg-dark);" data-demo>Get a free demo →</button>
+          <a class="btn btn-primary" data-book>Book a 15-min call</a>
+        </div>
       </div>
     </div>
 
@@ -168,7 +195,7 @@
       <div class="footer-brand">
         <div class="logo-full"><span class="logo-aa"><span class="a1">A</span><span class="a2">A</span></span><span class="logo-sub">Double-A Digital</span><span class="logo-line"></span></div>
         <p>A Simi Valley studio building websites and apps for local businesses.</p>
-        <div class="socials" style="margin-top:20px;"><a href="#" class="soc-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a href="#" class="soc-icon" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a></div>
+        <div class="socials" style="margin-top:20px;"><a href="https://www.instagram.com/" target="_blank" rel="noopener" class="soc-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a href="https://www.linkedin.com/" target="_blank" rel="noopener" class="soc-icon" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a></div>
       </div>
       <div class="footer-col"><h4>Pages</h4><a href="index.html">Home</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="work.html">Our Work</a><a href="about.html">About</a></div>
       <div class="footer-col"><h4>Services</h4><a href="services.html">Website Design</a><a href="services.html">Web App Dev</a><a href="services.html">E-Commerce</a><a href="services.html">Maintenance</a></div>
@@ -179,61 +206,5 @@
 </footer>
 
 <script src="main.js"></script>
-<script>
-  const scForm = document.getElementById('standalone-contact-form');
-  if (scForm) {
-    scForm.addEventListener('submit', e => {
-      e.preventDefault();
-      let valid = true;
-      scForm.querySelectorAll('[required]').forEach(f => {
-        const v = f.value.trim();
-        if (!v || (f.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))) {
-          f.classList.add('err'); valid = false;
-        } else { f.classList.remove('err'); }
-      });
-      if (valid) {
-        const btn = scForm.querySelector('button[type="submit"]');
-        btn.textContent = 'Sending...'; btn.disabled = true;
-        // Save to localStorage for admin portal
-        const leads = JSON.parse(localStorage.getItem('daa_leads') || '[]');
-        leads.unshift({
-          id: Date.now() + '-' + Math.random().toString(36).slice(2, 7),
-          timestamp: new Date().toISOString(),
-          status: 'new', read: false, notes: '',
-          source:   'contact',
-          name:     scForm.querySelector('#sc-name').value.trim(),
-          business: scForm.querySelector('#sc-biz').value.trim(),
-          email:    scForm.querySelector('#sc-email').value.trim(),
-          phone:    scForm.querySelector('#sc-phone').value.trim(),
-          service:  scForm.querySelector('#sc-service').value,
-          budget:   scForm.querySelector('#sc-budget').value || '',
-          message:  scForm.querySelector('#sc-msg').value.trim(),
-          plan: '', btype: '', addons: [],
-        });
-        localStorage.setItem('daa_leads', JSON.stringify(leads));
-        fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            access_key: '4f03cec7-0a89-4cc3-bd5f-f8957d744e43',
-            subject: `New Contact Form — ${scForm.querySelector('#sc-name').value.trim()} (${scForm.querySelector('#sc-biz').value.trim()})`,
-            from_name: 'Double-A Digital Website',
-            name:     scForm.querySelector('#sc-name').value.trim(),
-            email:    scForm.querySelector('#sc-email').value.trim(),
-            phone:    scForm.querySelector('#sc-phone').value.trim() || 'Not provided',
-            business: scForm.querySelector('#sc-biz').value.trim(),
-            service:  scForm.querySelector('#sc-service').value,
-            budget:   scForm.querySelector('#sc-budget').value || 'Not provided',
-            message:  scForm.querySelector('#sc-msg').value.trim(),
-          }),
-        }).finally(() => {
-          scForm.reset(); btn.textContent = 'Send it →'; btn.disabled = false;
-          document.getElementById('sc-success').style.display = 'block';
-          setTimeout(() => document.getElementById('sc-success').style.display = 'none', 5000);
-        });
-      }
-    });
-  }
-</script>
 </body>
 </html>
