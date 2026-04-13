@@ -7,9 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollTop();
   initNavbar();
   initActiveNav();
-  injectModals();
-  wireBookTriggers();
-  initScrollReveal();
+  injectModals();  initScrollReveal();
   initFAQ();
   initPortfolioFilter();
   initSmoothScroll();
@@ -650,16 +648,6 @@ function wireDemoTriggers() {
       e.preventDefault();
       openDemoModal(el.dataset.plan || '');
     });
-  });
-}
-
-function wireBookTriggers() {
-  const BOOK_URL = 'https://calendly.com/doubleadigital324/15min';
-  document.querySelectorAll('[data-book]').forEach(el => {
-    el.setAttribute('href', BOOK_URL);
-    el.setAttribute('target', '_blank');
-    el.setAttribute('rel', 'noopener noreferrer');
-    el.addEventListener('click', () => trackEvent('book_call_click', { label: el.textContent.trim() }));
   });
 }
 
