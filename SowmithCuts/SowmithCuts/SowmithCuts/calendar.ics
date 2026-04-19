@@ -1,0 +1,30 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//sebbo.net//ical-generator//EN
+NAME:Sowmith Cuts — Appointments
+X-WR-CALNAME:Sowmith Cuts — Appointments
+TIMEZONE-ID:America/Los_Angeles
+X-WR-TIMEZONE:America/Los_Angeles
+BEGIN:VEVENT
+UID:69e3f5d2-b9f3-478c-8277-2dc232b681a7
+SEQUENCE:0
+DTSTAMP:20260327T143605
+DTSTART;TZID=America/Los_Angeles:20260326T163000
+DTEND;TZID=America/Los_Angeles:20260326T170000
+SUMMARY:Standard Cut + Beard — Aarush Gurram
+LOCATION:Sowmith Cuts\, Simi Valley CA
+DESCRIPTION:Client: Aarush Gurram\nPhone: 18052841628\nNotes: i am a lard\
+ nRef: MN70ZFBDTN9
+END:VEVENT
+BEGIN:VEVENT
+UID:192893b8-491e-4355-9b95-ed17d901c11f
+SEQUENCE:0
+DTSTAMP:20260327T143605
+DTSTART;TZID=America/Los_Angeles:20260326T173000
+DTEND;TZID=America/Los_Angeles:20260326T180000
+SUMMARY:Standard Cut + Beard — Aarush Gurram
+LOCATION:Sowmith Cuts\, Simi Valley CA
+DESCRIPTION:Client: Aarush Gurram\nPhone: 18052841628\nNotes: kairav sucks
+  dick\nRef: MN7QE6NAPW1
+END:VEVENT
+END:VCALENDAR

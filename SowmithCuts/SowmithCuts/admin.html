@@ -1,0 +1,2085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Sowmith Cuts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #e8c87a;
+      --dark: #0d0d0d;
+      --dark-2: #111111;
+      --dark-3: #181818;
+      --dark-4: #202020;
+      --border: #2a2a2a;
+      --text: #f0f0f0;
+      --text-muted: #888;
+      --red: #e05c5c;
+      --red-bg: rgba(224,92,92,0.1);
+      --green: #5cb85c;
+      --green-bg: rgba(92,184,92,0.1);
+      --orange: #e08c3a;
+      --orange-bg: rgba(224,140,58,0.1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { height: 100%; }
+    body {
+      background: var(--dark); color: var(--text);
+      font-family: 'Inter', sans-serif; line-height: 1.6; min-height: 100%;
+    }
+
+    /* ══ LOGIN SCREEN ══ */
+    #loginScreen {
+      min-height: 100vh; display: flex; align-items: center;
+      justify-content: center; padding: 2rem;
+      background: var(--dark);
+    }
+    #loginScreen::before {
+      content: ''; position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 40%, rgba(201,168,76,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse at 75% 70%, rgba(201,168,76,0.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .login-card {
+      background: var(--dark-3); border: 1px solid var(--border);
+      border-radius: 14px; padding: 2.8rem 2.5rem;
+      width: 100%; max-width: 400px;
+      position: relative; z-index: 1;
+    }
+    .login-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; color: var(--gold);
+      text-align: center; margin-bottom: 0.3rem;
+    }
+    .login-sub {
+      text-align: center; color: var(--text-muted);
+      font-size: 0.78rem; letter-spacing: 0.2em;
+      text-transform: uppercase; margin-bottom: 2.2rem;
+    }
+    .login-title {
+      font-size: 1rem; font-weight: 600; margin-bottom: 1.6rem;
+      padding-bottom: 1rem; border-bottom: 1px solid var(--border);
+    }
+    .lgroup { margin-bottom: 1.1rem; }
+    .llabel {
+      display: block; font-size: 0.72rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.45rem;
+    }
+    .linput {
+      width: 100%; background: var(--dark-4); border: 1.5px solid var(--border);
+      border-radius: 6px; color: var(--text);
+      padding: 0.72rem 0.95rem; font-size: 0.9rem;
+      font-family: 'Inter', sans-serif; outline: none;
+      transition: border-color 0.2s;
+    }
+    .linput:focus { border-color: var(--gold); }
+    .linput::placeholder { color: #3a3a3a; }
+    .login-btn {
+      width: 100%; background: var(--gold); color: var(--dark);
+      border: none; border-radius: 6px; padding: 0.9rem;
+      font-size: 0.88rem; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 0.5rem;
+    }
+    .login-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .pw-wrap { position: relative; }
+    .pw-wrap .linput { width: 100%; padding-right: 2.8rem; }
+    .pw-toggle {
+      position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; color: var(--text-muted);
+      font-size: 1rem; padding: 0; line-height: 1; transition: color 0.2s;
+    }
+    .pw-toggle:hover { color: var(--gold); }
+    .login-err {
+      background: var(--red-bg); border: 1px solid rgba(224,92,92,0.3);
+      border-radius: 6px; padding: 0.65rem 0.9rem;
+      font-size: 0.82rem; color: var(--red);
+      margin-bottom: 1rem; display: none;
+    }
+    .login-err.show { display: block; }
+    .back-link {
+      display: block; text-align: center;
+      margin-top: 1.4rem; font-size: 0.8rem; color: var(--text-muted);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--gold); }
+
+    /* ══ DASHBOARD ══ */
+    #dashboard { display: none; min-height: 100vh; }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0; width: 240px;
+      background: var(--dark-2); border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; z-index: 50;
+      transition: transform 0.3s;
+    }
+    .sb-logo {
+      padding: 1.6rem 1.5rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .sb-logo-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; color: var(--gold);
+    }
+    .sb-logo-sub {
+      font-size: 0.68rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--text-muted); margin-top: 0.1rem;
+    }
+    .sb-nav { flex: 1; padding: 1rem 0; overflow-y: auto; }
+    .sb-section-label {
+      font-size: 0.62rem; letter-spacing: 0.25em;
+      text-transform: uppercase; color: #444;
+      padding: 0.8rem 1.5rem 0.4rem;
+    }
+    .sb-link {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.65rem 1.5rem; font-size: 0.86rem; color: var(--text-muted);
+      cursor: pointer; transition: background 0.15s, color 0.15s;
+      border: none; background: none; width: 100%; text-align: left;
+      border-left: 2px solid transparent;
+    }
+    .sb-link:hover { background: rgba(255,255,255,0.03); color: var(--text); }
+    .sb-link.active { color: var(--gold); background: rgba(201,168,76,0.06); border-left-color: var(--gold); }
+    .sb-icon { font-size: 1rem; width: 1.2rem; text-align: center; flex-shrink: 0; }
+    .sb-bottom {
+      padding: 1rem 1.5rem; border-top: 1px solid var(--border);
+    }
+    .sb-logout {
+      display: flex; align-items: center; gap: 0.65rem;
+      font-size: 0.83rem; color: var(--text-muted);
+      cursor: pointer; transition: color 0.2s;
+      background: none; border: none; width: 100%; text-align: left;
+      padding: 0.4rem 0;
+    }
+    .sb-logout:hover { color: var(--red); }
+    .sb-user {
+      font-size: 0.78rem; color: var(--text-muted);
+      margin-bottom: 0.6rem;
+    }
+    .sb-user strong { color: var(--text); }
+
+    /* Main content */
+    .main {
+      margin-left: 240px; min-height: 100vh;
+      background: var(--dark);
+    }
+    .topbar {
+      padding: 1.2rem 2rem; border-bottom: 1px solid var(--border);
+      background: var(--dark-2); display: flex;
+      justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 40;
+    }
+    .topbar-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; }
+    .topbar-date { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* Pages */
+    .page { display: none; padding: 2rem; }
+    .page.active { display: block; }
+
+    /* ── Stat cards ── */
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card {
+      background: var(--dark-3); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.3rem 1.5rem;
+    }
+    .stat-card.highlight { border-color: rgba(201,168,76,0.4); background: rgba(201,168,76,0.04); }
+    .stat-card.red-card  { border-color: rgba(224,92,92,0.3); background: var(--red-bg); }
+    .stat-num  { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); line-height: 1; }
+    .stat-label{ font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.3rem; }
+
+    /* ── Section headers ── */
+    .sh {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1.1rem;
+    }
+    .sh-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; }
+    .sh-sub   { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.1rem; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--dark-3); border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden; margin-bottom: 1.5rem;
+    }
+    .card-head {
+      padding: 1rem 1.4rem; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--dark-4);
+    }
+    .card-head-title { font-weight: 600; font-size: 0.9rem; }
+    .card-body { padding: 1.4rem; }
+
+    /* ── Appointment list ── */
+    .appt-list { display: flex; flex-direction: column; gap: 0.65rem; }
+    .appt-item {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--dark-4); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.9rem 1.1rem;
+      transition: border-color 0.2s;
+    }
+    .appt-item:hover { border-color: rgba(201,168,76,0.3); }
+    .appt-item.past { opacity: 0.45; }
+    .appt-time {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; color: var(--gold);
+      min-width: 80px; flex-shrink: 0;
+    }
+    .appt-info { flex: 1; min-width: 0; }
+    .appt-name { font-weight: 600; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .appt-detail { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.1rem; }
+    .appt-service {
+      background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 4px; padding: 0.2rem 0.6rem;
+      font-size: 0.72rem; color: var(--gold);
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .appt-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+    .btn-cancel {
+      background: none; border: 1px solid rgba(224,92,92,0.4);
+      color: var(--red); padding: 0.32rem 0.8rem;
+      border-radius: 4px; cursor: pointer; font-size: 0.76rem;
+      font-weight: 600; transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .btn-cancel:hover { background: var(--red-bg); }
+    .empty-state {
+      text-align: center; padding: 2.5rem 1rem;
+      color: var(--text-muted); font-size: 0.88rem; font-style: italic;
+    }
+
+    /* ── Calendar (admin) ── */
+    .admin-cal-wrap {
+      background: var(--dark-3); border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+    }
+    .acal-head {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 1.4rem; background: var(--dark-4);
+      border-bottom: 1px solid var(--border);
+    }
+    .acal-title { font-family: 'Playfair Display', serif; font-size: 1rem; }
+    .acal-nav {
+      background: none; border: none; color: var(--text);
+      font-size: 1.1rem; cursor: pointer; padding: 0.3rem 0.65rem;
+      border-radius: 4px; transition: background 0.15s, color 0.15s;
+    }
+    .acal-nav:hover { background: var(--border); color: var(--gold); }
+    .acal-body { padding: 1rem 1.2rem 1.4rem; }
+    .acal-weekdays { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; margin-bottom: 0.4rem; }
+    .acal-wd { text-align: center; font-size: 0.67rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); padding: 0.3rem 0; }
+    .acal-days { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
+    .acal-day {
+      aspect-ratio: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      border-radius: 6px; font-size: 0.82rem;
+      border: 1.5px solid transparent; position: relative;
+      transition: all 0.15s; cursor: default;
+    }
+    .acal-day.clickable { cursor: pointer; }
+    .acal-day.empty     {}
+    .acal-day.past      { color: #333; }
+    .acal-day.closed    { color: #272727; }
+    .acal-day.blocked   {
+      background: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,0.02) 4px, rgba(255,255,255,0.02) 8px);
+      color: #3a3a3a;
+    }
+    .acal-day.has-appts { color: var(--text); }
+    .acal-day.has-appts:hover { background: rgba(201,168,76,0.1); border-color: rgba(201,168,76,0.4); }
+    .acal-day.today-ring { border-color: rgba(201,168,76,0.5); }
+    .acal-day.selected  { background: var(--gold); color: var(--dark); border-color: var(--gold); font-weight: 700; }
+    .acal-day .day-num  { line-height: 1; }
+    .acal-day .dot-row  { display: flex; gap: 2px; margin-top: 2px; }
+    .acal-dot           { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); }
+    .acal-dot.red       { background: var(--red); }
+    .acal-legend {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      padding: 0.9rem 1.2rem; border-top: 1px solid var(--border);
+    }
+    .aleg { display: flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; color: var(--text-muted); }
+    .aleg-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* ── Tables ── */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    .data-table th {
+      text-align: left; padding: 0.75rem 1rem;
+      background: var(--dark-4); color: var(--text-muted);
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr.past-row { opacity: 0.4; }
+    .data-table tr:hover:not(.past-row) td { background: rgba(255,255,255,0.015); }
+    .ref-code { font-family: monospace; font-size: 0.78rem; color: var(--gold); }
+    .status-pill {
+      display: inline-block; padding: 0.18rem 0.6rem;
+      border-radius: 20px; font-size: 0.7rem; font-weight: 600; white-space: nowrap;
+    }
+    .status-pill.upcoming { background: var(--green-bg); color: var(--green); border: 1px solid rgba(92,184,92,0.3); }
+    .status-pill.today    { background: rgba(201,168,76,0.15); color: var(--gold); border: 1px solid rgba(201,168,76,0.3); }
+    .status-pill.past     { background: rgba(255,255,255,0.05); color: #555; border: 1px solid #2a2a2a; }
+
+    /* ── Blocked days manager ── */
+    .block-row { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; margin-bottom: 1.2rem; }
+    .block-input {
+      background: var(--dark-4); border: 1.5px solid var(--border);
+      border-radius: 6px; color: var(--text);
+      padding: 0.65rem 0.95rem; font-size: 0.88rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .block-input:focus { border-color: var(--gold); }
+    .block-note {
+      background: var(--dark-4); border: 1.5px solid var(--border);
+      border-radius: 6px; color: var(--text);
+      padding: 0.65rem 0.95rem; font-size: 0.88rem;
+      outline: none; transition: border-color 0.2s; flex: 1; min-width: 180px;
+    }
+    .block-note:focus { border-color: var(--gold); }
+    .block-note::placeholder { color: #3a3a3a; }
+    .btn-red {
+      background: var(--red); color: #fff; border: none;
+      border-radius: 6px; padding: 0.65rem 1.3rem;
+      font-size: 0.85rem; font-weight: 700; cursor: pointer;
+      transition: opacity 0.2s; white-space: nowrap;
+    }
+    .btn-red:hover { opacity: 0.85; }
+    .btn-gold-sm {
+      background: var(--gold); color: var(--dark); border: none;
+      border-radius: 6px; padding: 0.6rem 1.2rem;
+      font-size: 0.82rem; font-weight: 700; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-gold-sm:hover { background: var(--gold-light); }
+    .blocked-grid { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .blocked-chip {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: var(--red-bg); border: 1px solid rgba(224,92,92,0.3);
+      border-radius: 6px; padding: 0.4rem 0.85rem;
+      font-size: 0.8rem;
+    }
+    .blocked-chip-date { color: var(--red); font-weight: 600; }
+    .blocked-chip-note { color: var(--text-muted); font-size: 0.73rem; }
+    .chip-del {
+      background: none; border: none; color: rgba(224,92,92,0.6);
+      cursor: pointer; font-size: 1rem; padding: 0; line-height: 1;
+      transition: color 0.2s;
+    }
+    .chip-del:hover { color: var(--red); }
+
+    /* ── Settings / Change password ── */
+    .settings-card {
+      background: var(--dark-3); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.8rem; max-width: 460px; margin-bottom: 1.5rem;
+    }
+    .settings-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 0.3rem; }
+    .settings-sub   { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.4rem; }
+    .sgroup { margin-bottom: 1rem; }
+    .slabel { display: block; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.45rem; }
+    .sinput {
+      width: 100%; background: var(--dark-4); border: 1.5px solid var(--border);
+      border-radius: 6px; color: var(--text);
+      padding: 0.68rem 0.95rem; font-size: 0.88rem;
+      font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s;
+    }
+    .sinput:focus { border-color: var(--gold); }
+    .save-msg { font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+    .save-msg.ok  { color: var(--green); display: block; }
+    .save-msg.err { color: var(--red);   display: block; }
+
+    /* ── Day detail panel ── */
+    .day-panel {
+      display: none; background: var(--dark-3); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.5rem; margin-top: 1.5rem;
+    }
+    .day-panel.open { display: block; }
+    .day-panel-title {
+      font-family: 'Playfair Display', serif; font-size: 1.1rem;
+      margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;
+    }
+    .day-close {
+      background: none; border: none; color: var(--text-muted);
+      cursor: pointer; font-size: 1.2rem; transition: color 0.2s;
+    }
+    .day-close:hover { color: var(--text); }
+
+    /* ── Confirm modal ── */
+    .overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.82); z-index: 200;
+      align-items: center; justify-content: center; padding: 1.5rem;
+    }
+    .overlay.on { display: flex; }
+    .confirm-box {
+      background: var(--dark-2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2rem 2rem 1.5rem;
+      max-width: 400px; width: 100%;
+    }
+    .confirm-icon { font-size: 2.2rem; margin-bottom: 0.6rem; }
+    .confirm-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .confirm-desc  { color: var(--text-muted); font-size: 0.87rem; margin-bottom: 1.5rem; line-height: 1.7; }
+    .confirm-detail {
+      background: var(--dark-3); border-radius: 8px;
+      padding: 0.8rem 1.1rem; margin-bottom: 1.5rem; font-size: 0.84rem;
+    }
+    .confirm-detail p { color: var(--text-muted); padding: 0.2rem 0; }
+    .confirm-detail p strong { color: var(--text); }
+    .confirm-btns { display: flex; gap: 0.8rem; justify-content: flex-end; }
+    .btn-ghost-sm {
+      background: none; border: 1px solid var(--border); color: var(--text-muted);
+      padding: 0.6rem 1.3rem; border-radius: 6px; cursor: pointer;
+      font-size: 0.85rem; transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-ghost-sm:hover { border-color: var(--text-muted); color: var(--text); }
+    .btn-red-sm {
+      background: var(--red); color: #fff; border: none;
+      padding: 0.6rem 1.4rem; border-radius: 6px; cursor: pointer;
+      font-size: 0.85rem; font-weight: 700; transition: opacity 0.2s;
+    }
+    .btn-red-sm:hover { opacity: 0.85; }
+
+    /* ── Live indicator ── */
+    .live-badge {
+      display: flex; align-items: center; gap: 0.45rem;
+      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--green); font-weight: 600;
+    }
+    .live-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 0 rgba(92,184,92,0.6);
+      animation: livepulse 1.8s ease-in-out infinite;
+    }
+    @keyframes livepulse {
+      0%   { box-shadow: 0 0 0 0 rgba(92,184,92,0.6); }
+      70%  { box-shadow: 0 0 0 7px rgba(92,184,92,0); }
+      100% { box-shadow: 0 0 0 0 rgba(92,184,92,0); }
+    }
+    @keyframes newflash {
+      0%   { background: rgba(201,168,76,0.25); border-color: var(--gold); }
+      100% { background: var(--dark-4); border-color: var(--border); }
+    }
+    .appt-item.new-flash { animation: newflash 2s ease-out forwards; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem;
+      background: var(--dark-3); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.85rem 1.3rem;
+      font-size: 0.84rem; z-index: 9999;
+      opacity: 0; transform: translateY(14px);
+      transition: opacity 0.3s, transform 0.3s; pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.t-ok  { border-color: rgba(92,184,92,0.5); }
+    .toast.t-err { border-color: rgba(224,92,92,0.5); }
+
+    /* ── Analytics ── */
+    .analytics-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
+    .atab {
+      background: var(--dark-3); border: 1px solid var(--border);
+      border-radius: 6px; padding: 0.55rem 1.2rem;
+      font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      color: var(--text-muted); transition: all 0.15s;
+    }
+    .atab:hover { border-color: rgba(201,168,76,0.4); color: var(--text); }
+    .atab.active { background: rgba(201,168,76,0.12); border-color: var(--gold); color: var(--gold); }
+    .analytics-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 1rem; margin-bottom: 1.8rem; }
+    .astat { background: var(--dark-3); border: 1px solid var(--border); border-radius: 10px; padding: 1.3rem 1.5rem; }
+    .astat.highlight { border-color: rgba(201,168,76,0.4); background: rgba(201,168,76,0.04); }
+    .astat-num { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); line-height: 1; }
+    .astat-label { font-size: 0.73rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.35rem; }
+    .chart-card { background: var(--dark-3); border: 1px solid var(--border); border-radius: 10px; padding: 1.4rem; margin-bottom: 1.5rem; }
+    .chart-title { font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 1.2rem; }
+    .bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 140px; }
+    .bar-wrap { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; }
+    .bar { width: 100%; background: rgba(201,168,76,0.7); border-radius: 4px 4px 0 0; transition: height 0.4s, background 0.2s; cursor: default; min-height: 3px; position: relative; }
+    .bar:hover { background: var(--gold); }
+    .bar-tooltip { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--dark-2); border: 1px solid var(--border); border-radius: 5px; padding: 3px 8px; font-size: 0.7rem; white-space: nowrap; color: var(--gold); z-index: 10; }
+    .bar:hover .bar-tooltip { display: block; }
+    .bar-label { font-size: 0.62rem; color: var(--text-muted); margin-top: 4px; text-align: center; }
+    .service-breakdown { display: flex; flex-direction: column; gap: 0.7rem; }
+    .svc-row { display: flex; align-items: center; gap: 0.8rem; }
+    .svc-row-name { font-size: 0.82rem; width: 220px; flex-shrink: 0; }
+    .svc-bar-bg { flex: 1; background: var(--dark-4); border-radius: 3px; height: 10px; overflow: hidden; }
+    .svc-bar-fill { height: 100%; background: var(--gold); border-radius: 3px; transition: width 0.4s; }
+    .svc-row-val { font-size: 0.78rem; color: var(--gold); width: 55px; text-align: right; flex-shrink: 0; }
+    .analytics-reset-btn {
+      background: none; border: 1px solid rgba(224,92,92,0.4); color: var(--red);
+      border-radius: 6px; padding: 0.6rem 1.3rem; font-size: 0.82rem;
+      font-weight: 600; cursor: pointer; transition: background 0.2s;
+    }
+    .analytics-reset-btn:hover { background: var(--red-bg); }
+
+    /* ── Messages ── */
+    .msg-layout { display: grid; grid-template-columns: 280px 1fr; gap: 1.2rem; height: calc(100vh - 140px); min-height: 400px; }
+    .msg-list { background: var(--dark-3); border: 1px solid var(--border); border-radius: 10px; overflow-y: auto; }
+    .msg-list-head { padding: 1rem 1.2rem; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 0.88rem; background: var(--dark-4); }
+    .msg-item {
+      padding: 0.9rem 1.2rem; border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: background 0.15s;
+    }
+    .msg-item:hover { background: rgba(255,255,255,0.03); }
+    .msg-item.active { background: rgba(201,168,76,0.08); border-left: 2px solid var(--gold); }
+    .msg-item.unread .msg-item-name { color: var(--gold); }
+    .msg-item-name { font-weight: 600; font-size: 0.88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .msg-item-preview { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .msg-item-time { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.1rem; }
+    .msg-convo { background: var(--dark-3); border: 1px solid var(--border); border-radius: 10px; display: flex; flex-direction: column; overflow: hidden; }
+    .msg-convo-head { padding: 1rem 1.4rem; border-bottom: 1px solid var(--border); background: var(--dark-4); display: flex; align-items: center; gap: 0.8rem; }
+    .msg-convo-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--gold); color: var(--dark); display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+    .msg-convo-name { font-weight: 600; font-size: 0.9rem; }
+    .msg-convo-messages { flex: 1; overflow-y: auto; padding: 1.2rem; display: flex; flex-direction: column; gap: 0.7rem; }
+    .msg-convo-messages::-webkit-scrollbar { width: 4px; }
+    .msg-convo-messages::-webkit-scrollbar-thumb { background: var(--border); }
+    .msg-bubble { max-width: 72%; padding: 0.6rem 1rem; border-radius: 10px; font-size: 0.86rem; line-height: 1.5; word-break: break-word; }
+    .msg-bubble.user { align-self: flex-start; background: var(--dark-4); border: 1px solid var(--border); }
+    .msg-bubble.sowmith { align-self: flex-end; background: var(--gold); color: var(--dark); }
+    .msg-bubble-time { font-size: 0.65rem; opacity: 0.6; margin-top: 0.2rem; }
+    .msg-convo-input { padding: 1rem; border-top: 1px solid var(--border); background: var(--dark-4); display: flex; gap: 0.6rem; }
+    .msg-reply-input {
+      flex: 1; background: var(--dark-3); border: 1.5px solid var(--border);
+      border-radius: 6px; color: var(--text); padding: 0.65rem 0.95rem;
+      font-size: 0.88rem; font-family: 'Inter', sans-serif; outline: none;
+      transition: border-color 0.2s;
+    }
+    .msg-reply-input:focus { border-color: var(--gold); }
+    .msg-reply-btn {
+      background: var(--gold); color: var(--dark); border: none;
+      border-radius: 6px; padding: 0 1.2rem; font-size: 0.88rem;
+      font-weight: 700; cursor: pointer; transition: background 0.2s;
+    }
+    .msg-reply-btn:hover { background: var(--gold-light); }
+    .msg-empty { display: flex; align-items: center; justify-content: center; flex: 1; color: var(--text-muted); font-size: 0.88rem; font-style: italic; }
+    @media (max-width: 800px) { .msg-layout { grid-template-columns: 1fr; height: auto; } .msg-convo { min-height: 400px; } }
+
+    /* ── Responsive ── */
+    .mobile-nav-btn {
+      display: none; position: fixed; top: 1rem; left: 1rem; z-index: 60;
+      background: var(--dark-3); border: 1px solid var(--border);
+      border-radius: 6px; padding: 0.5rem 0.7rem;
+      cursor: pointer; font-size: 1.1rem;
+    }
+    @media (max-width: 800px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.mob-open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .mobile-nav-btn { display: block; }
+      .topbar { padding-left: 3.5rem; }
+      .page { padding: 1.2rem; }
+      .appt-item { flex-wrap: wrap; }
+      .appt-service { order: -1; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ LOGIN SCREEN ══════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">Sowmith Cuts</div>
+    <div class="login-sub">Owner Portal</div>
+    <div class="login-title">Sign In to Dashboard</div>
+    <div class="login-err" id="loginErr">Incorrect email or password.</div>
+    <form id="loginForm">
+      <div class="lgroup">
+        <label class="llabel" for="lUser">Email</label>
+        <input type="email" class="linput" id="lUser" placeholder="Enter email" autocomplete="email" required>
+      </div>
+      <div class="lgroup">
+        <label class="llabel" for="lPass">Password</label>
+        <div class="pw-wrap">
+          <input type="password" class="linput" id="lPass" placeholder="Enter password" autocomplete="current-password" required>
+          <button type="button" class="pw-toggle" onclick="togglePw()" id="pwToggleBtn" aria-label="Show password">👁️</button>
+        </div>
+      </div>
+      <button type="submit" class="login-btn">Sign In</button>
+    </form>
+    <a href="index.html" class="back-link">← Back to main site</a>
+  </div>
+</div>
+
+<!-- ══════════ DASHBOARD ══════════ -->
+<div id="dashboard">
+
+  <!-- Mobile nav toggle -->
+  <button class="mobile-nav-btn" id="mobNavBtn">☰</button>
+
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-name">Sowmith Cuts</div>
+      <div class="sb-logo-sub">Admin Dashboard</div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-section-label">Overview</div>
+      <button class="sb-link active" data-page="overview">
+        <span class="sb-icon">📊</span> Overview
+      </button>
+      <button class="sb-link" data-page="schedule">
+        <span class="sb-icon">📅</span> Today's Schedule
+      </button>
+
+      <div class="sb-section-label">Manage</div>
+      <button class="sb-link" data-page="appointments">
+        <span class="sb-icon">✂️</span> All Appointments
+      </button>
+      <button class="sb-link" data-page="calendar">
+        <span class="sb-icon">🗓</span> Calendar View
+      </button>
+      <button class="sb-link" data-page="availability">
+        <span class="sb-icon">🚫</span> Availability
+      </button>
+
+      <div class="sb-section-label">Analytics</div>
+      <button class="sb-link" data-page="analytics">
+        <span class="sb-icon">📈</span> Analytics
+      </button>
+
+      <div class="sb-section-label">Communication</div>
+      <button class="sb-link" data-page="messages">
+        <span class="sb-icon">💬</span> Messages
+        <span id="chat-badge" style="margin-left:auto;background:var(--red);color:#fff;font-size:.68rem;padding:1px 6px;border-radius:10px;display:none"></span>
+      </button>
+
+      <div class="sb-section-label">Account</div>
+      <button class="sb-link" data-page="settings">
+        <span class="sb-icon">⚙️</span> Settings
+      </button>
+    </div>
+    <div class="sb-bottom">
+      <div class="sb-user">Signed in as <strong id="sbUserName">Sowmith</strong></div>
+      <button class="sb-logout" onclick="logout()">
+        <span>→</span> Sign Out
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main area -->
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title" id="topbarTitle">Overview</div>
+        <div class="topbar-date" id="topbarDate"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:1.2rem">
+        <div class="live-badge" id="liveBadge" style="display:none">
+          <div class="live-dot"></div> Live
+        </div>
+        <a href="index.html" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">
+          ← Customer Site
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── OVERVIEW PAGE ─── -->
+    <div class="page active" id="page-overview">
+      <div class="stats-row" id="statsRow"></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem" id="overviewGrid">
+        <div>
+          <div class="sh"><div><div class="sh-title">Today's Appointments</div><div class="sh-sub" id="todayDateSub"></div></div></div>
+          <div class="appt-list" id="todayList"></div>
+        </div>
+        <div>
+          <div class="sh"><div><div class="sh-title">Upcoming This Week</div></div></div>
+          <div class="appt-list" id="weekList"></div>
+        </div>
+      </div>
+
+      <!-- Live all-bookings feed -->
+      <div style="margin-top:2rem">
+        <div class="sh">
+          <div>
+            <div class="sh-title" style="display:flex;align-items:center;gap:0.7rem">
+              All Bookings
+              <div class="live-badge" id="feedLiveBadge" style="display:none;font-size:0.65rem">
+                <div class="live-dot"></div> Live
+              </div>
+            </div>
+            <div class="sh-sub">Every booking — updates automatically in real time</div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="overflow-x:auto">
+            <table class="data-table" id="liveTable">
+              <thead><tr>
+                <th>Status</th><th>Date</th><th>Time</th>
+                <th>Client</th><th>Phone</th><th>Service</th><th>Notes</th><th></th>
+              </tr></thead>
+              <tbody id="liveTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── TODAY'S SCHEDULE PAGE ─── -->
+    <div class="page" id="page-schedule">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-title" id="scheduleHeading">Today's Schedule</div>
+          <button onclick="exportToCalendar()" style="background:var(--gold);color:#000;border:none;border-radius:6px;padding:0.45rem 1rem;font-size:0.8rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:0.4rem;">📅 Add to Calendar</button>
+        </div>
+        <div class="card-body">
+          <div class="appt-list" id="scheduleList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── ALL APPOINTMENTS PAGE ─── -->
+    <div class="page" id="page-appointments">
+      <div style="display:flex;gap:0.8rem;margin-bottom:1.2rem;flex-wrap:wrap;align-items:center">
+        <select id="filterStatus" class="block-input" style="min-width:140px">
+          <option value="all">All Appointments</option>
+          <option value="upcoming">Upcoming Only</option>
+          <option value="today">Today Only</option>
+          <option value="past">Past Only</option>
+        </select>
+        <select id="filterService" class="block-input" style="min-width:160px">
+          <option value="all">All Services</option>
+          <option value="Classic Cut">Classic Cut</option>
+          <option value="Classic Cut + Beard">Classic Cut + Beard</option>
+          <option value="Classic Cut + Design">Classic Cut + Design</option>
+        </select>
+        <input type="text" id="filterSearch" class="block-note" placeholder="Search by name or phone…" style="max-width:220px;flex:1">
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-title">Appointments</div>
+          <div id="apptCount" style="font-size:0.78rem;color:var(--text-muted)"></div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="data-table" id="apptTable">
+            <thead><tr>
+              <th>Status</th><th>Date</th><th>Time</th>
+              <th>Client</th><th>Phone</th><th>Service</th>
+              <th>Notes</th><th>Ref #</th><th></th>
+            </tr></thead>
+            <tbody id="apptTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── CALENDAR VIEW PAGE ─── -->
+    <div class="page" id="page-calendar">
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start">
+        <div class="admin-cal-wrap" style="min-width:300px">
+          <div class="acal-head">
+            <button class="acal-nav" id="aCalPrev">&#8249;</button>
+            <div class="acal-title" id="aCalTitle">Month Year</div>
+            <button class="acal-nav" id="aCalNext">&#8250;</button>
+          </div>
+          <div class="acal-body">
+            <div class="acal-weekdays">
+              <div class="acal-wd">Sun</div><div class="acal-wd">Mon</div>
+              <div class="acal-wd">Tue</div><div class="acal-wd">Wed</div>
+              <div class="acal-wd">Thu</div><div class="acal-wd">Fri</div>
+              <div class="acal-wd">Sat</div>
+            </div>
+            <div class="acal-days" id="aCalDays"></div>
+          </div>
+          <div class="acal-legend">
+            <div class="aleg"><div class="aleg-dot" style="background:var(--gold)"></div> Booked</div>
+            <div class="aleg"><div class="aleg-dot" style="background:var(--red)"></div> Blocked</div>
+            <div class="aleg"><div class="aleg-dot" style="background:#333"></div> Closed</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="day-panel open" id="dayPanel">
+            <div class="day-panel-title">
+              <span id="dayPanelTitle">Select a day to view appointments</span>
+              <button class="day-close" id="dayPanelClose" onclick="clearDayPanel()">✕</button>
+            </div>
+            <div class="appt-list" id="dayPanelList">
+              <div class="empty-state">Click any day on the calendar to view its appointments.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── AVAILABILITY PAGE ─── -->
+    <div class="page" id="page-availability">
+      <div class="card" style="max-width:600px">
+        <div class="card-head"><div class="card-head-title">Block Days Off</div></div>
+        <div class="card-body">
+          <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.2rem">Blocked days will show as unavailable on the booking calendar. Customers won't be able to book.</p>
+          <div class="block-row">
+            <input type="date" class="block-input" id="blockDateIn">
+            <input type="text" class="block-note" id="blockNoteIn" placeholder="Reason (optional, e.g. Vacation)">
+            <button class="btn-red" onclick="addBlock()">Block Day</button>
+          </div>
+          <div id="blockedGrid" class="blocked-grid"></div>
+        </div>
+      </div>
+
+      <div class="card" style="max-width:600px">
+        <div class="card-head">
+          <div class="card-head-title">Business Hours</div>
+          <span id="schedSaveStatus" style="font-size:0.78rem;color:var(--text-muted)"></span>
+        </div>
+        <div class="card-body">
+          <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1.2rem">Set which days you're open and your start/end times. Changes go live instantly on the booking site.</p>
+          <div id="schedEditor" style="display:flex;flex-direction:column;gap:0.7rem"></div>
+          <button onclick="saveSchedule()" style="margin-top:1.2rem;background:var(--gold);color:#000;border:none;border-radius:7px;padding:0.55rem 1.4rem;font-weight:600;font-size:0.85rem;cursor:pointer;">Save Hours</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SETTINGS PAGE ─── -->
+    <div class="page" id="page-analytics">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem">
+        <div class="analytics-tabs">
+          <button class="atab active" onclick="setAnalyticsTab('day',this)">Today</button>
+          <button class="atab" onclick="setAnalyticsTab('week',this)">This Week</button>
+          <button class="atab" onclick="setAnalyticsTab('month',this)">This Month</button>
+          <button class="atab" onclick="setAnalyticsTab('6months',this)">6 Months</button>
+        </div>
+        <button class="analytics-reset-btn" onclick="confirmResetAnalytics()">🗑 Reset Analytics</button>
+      </div>
+      <div class="analytics-stats" id="analytics-stats"></div>
+      <div class="chart-card">
+        <div class="chart-title" id="chart-title">Revenue</div>
+        <div class="bar-chart" id="analytics-chart"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Revenue by Service</div>
+        <div class="service-breakdown" id="service-breakdown"></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-messages">
+      <div class="msg-layout">
+        <div class="msg-list">
+          <div class="msg-list-head">All Conversations</div>
+          <div id="msg-list-body"><div class="empty-state">No messages yet.</div></div>
+        </div>
+        <div class="msg-convo" id="msg-convo">
+          <div class="msg-empty" id="msg-convo-empty">Select a conversation to view messages</div>
+          <div id="msg-convo-inner" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+            <div class="msg-convo-head">
+              <div class="msg-convo-avatar" id="convo-avatar">?</div>
+              <div class="msg-convo-name" id="convo-name">—</div>
+            </div>
+            <div class="msg-convo-messages" id="convo-messages"></div>
+            <div class="msg-convo-input">
+              <input class="msg-reply-input" id="msg-reply-input" type="text" placeholder="Reply to this customer..." maxlength="500" onkeydown="if(event.key==='Enter')adminSendMsg()">
+              <button class="msg-reply-btn" onclick="adminSendMsg()">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-settings">
+      <div class="settings-card">
+        <div class="settings-title">Change Password</div>
+        <div class="settings-sub">Update your admin login password.</div>
+        <form id="pwForm">
+          <div class="sgroup">
+            <label class="slabel" for="pwCurrent">Current Password</label>
+            <input type="password" class="sinput" id="pwCurrent" placeholder="Current password" required>
+          </div>
+          <div class="sgroup">
+            <label class="slabel" for="pwNew">New Password</label>
+            <input type="password" class="sinput" id="pwNew" placeholder="At least 6 characters" required>
+          </div>
+          <div class="sgroup">
+            <label class="slabel" for="pwConfirm">Confirm New Password</label>
+            <input type="password" class="sinput" id="pwConfirm" placeholder="Repeat new password" required>
+          </div>
+          <button type="submit" class="btn-gold-sm">Update Password</button>
+          <div class="save-msg" id="pwMsg"></div>
+        </form>
+      </div>
+
+
+      <div class="settings-card" style="border-color:rgba(224,92,92,0.3)">
+        <div class="settings-title" style="color:var(--red)">Danger Zone</div>
+        <div class="settings-sub">Permanently delete all booking data.</div>
+        <button class="btn-red" onclick="confirmClearAll()">Clear All Booking Data</button>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /dashboard -->
+
+<!-- Confirm cancel modal -->
+<div class="overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">⚠️</div>
+    <div class="confirm-title" id="confirmTitle">Cancel Appointment?</div>
+    <div class="confirm-desc" id="confirmDesc">This will permanently remove the booking.</div>
+    <div class="confirm-detail" id="confirmDetail"></div>
+    <div class="confirm-btns">
+      <button class="btn-ghost-sm" onclick="closeConfirm()">Keep It</button>
+      <button class="btn-red-sm" id="confirmOkBtn">Yes, Cancel It</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script type="module">
+// ══════════════════════════════════════════════
+//  FIREBASE
+// ══════════════════════════════════════════════
+import { initializeApp }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import {
+  getFirestore, doc, setDoc, updateDoc, deleteField,
+  onSnapshot, collection, writeBatch, getDocs, addDoc, serverTimestamp, query, orderBy
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import {
+  getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged,
+  updatePassword, reauthenticateWithCredential, EmailAuthProvider
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { FIREBASE_CONFIG } from './firebase-config.js';
+
+const app  = initializeApp(FIREBASE_CONFIG);
+const db   = getFirestore(app);
+const auth = getAuth(app);
+
+// ══════════════════════════════════════════════
+//  IN-MEMORY CACHE  (driven by Firestore)
+//  bookingsCache: { 'YYYY-MM-DD': { '9:00 AM': {...} } }
+//  blockedCache:  { 'YYYY-MM-DD': { note: '' } }
+// ══════════════════════════════════════════════
+let bookingsCache = {};
+let blockedCache  = {};
+let prevBookingKeys = null; // track existing booking keys to detect new ones
+
+// Firestore listeners — started after login
+function startListeners() {
+  onSnapshot(collection(db, 'bookings'), snap => {
+    const newCache = {};
+    snap.forEach(d => { newCache[d.id] = d.data(); });
+
+    // Detect genuinely new bookings (not deletes) after initial load
+    if (prevBookingKeys !== null) {
+      snap.docChanges().forEach(change => {
+        if (change.type === 'modified' || change.type === 'added') {
+          const dateDoc = change.doc.data();
+          const prev = bookingsCache[change.doc.id] || {};
+          Object.entries(dateDoc).forEach(([time, b]) => {
+            if (!prev[time]) {
+              // New slot appeared — notify
+              toast(`New booking: ${b.name} on ${dateLabel(change.doc.id, {month:'short',day:'numeric'})} at ${time} ✂️`);
+            }
+          });
+        }
+      });
+    }
+    prevBookingKeys = snap.docs.map(d => d.id);
+    bookingsCache = newCache;
+
+    // Show live indicator once connected
+    const badge = document.getElementById('liveBadge');
+    if (badge) badge.style.display = 'flex';
+
+    refreshCurrentPage();
+  }, err => console.error('Bookings:', err));
+
+  onSnapshot(doc(db, 'config', 'settings'), snap => {
+    blockedCache = (snap.data() || {}).blocked || {};
+    const savedSchedule = (snap.data() || {}).schedule || null;
+    if (savedSchedule) renderScheduleEditor(savedSchedule);
+    refreshCurrentPage();
+  }, err => console.error('Settings:', err));
+}
+
+let currentPage = 'overview';
+function refreshCurrentPage() {
+  if (!document.getElementById('dashboard') ||
+      document.getElementById('dashboard').style.display === 'none') return;
+  renderOverview();
+  if (currentPage === 'schedule')     renderTodaySchedule();
+  if (currentPage === 'appointments') renderApptTable();
+  if (currentPage === 'calendar')   { renderAdminCal(); if (selectedCalDay) openDayPanel(selectedCalDay); }
+  if (currentPage === 'availability') renderBlocked();
+}
+
+// ══════════════════════════════════════════════
+//  DEFAULTS & CREDENTIALS
+// ══════════════════════════════════════════════
+// ══════════════════════════════════════════════
+//  PASSWORD TOGGLE
+// ══════════════════════════════════════════════
+window.togglePw = function() {
+  const input = document.getElementById('lPass');
+  const btn   = document.getElementById('pwToggleBtn');
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁️';
+  }
+}
+
+// ══════════════════════════════════════════════
+//  AUTH — Firebase Authentication
+// ══════════════════════════════════════════════
+onAuthStateChanged(auth, user => {
+  if (user) {
+    showDashboard(user);
+  } else {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('dashboard').style.display = 'none';
+  }
+});
+
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const email = document.getElementById('lUser').value.trim();
+  const pass  = document.getElementById('lPass').value;
+  const err   = document.getElementById('loginErr');
+
+  signInWithEmailAndPassword(auth, email, pass)
+    .then(() => { err.classList.remove('show'); })
+    .catch(() => {
+      err.classList.add('show');
+      document.getElementById('lPass').value = '';
+      document.getElementById('lPass').focus();
+    });
+});
+
+function showDashboard(user) {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  document.getElementById('sbUserName').textContent = user ? user.email : 'Admin';
+  startListeners();
+  startChatListener();
+  loadAnalyticsSettings();
+  initDashboard();
+}
+
+function logout() {
+  signOut(auth);
+}
+
+// ══════════════════════════════════════════════
+//  HELPERS  (read from in-memory cache)
+// ══════════════════════════════════════════════
+const CLOSED_DOW = [0, 1];
+const SLOTS_WEEKDAY = [
+  '9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM',
+  '12:00 PM','12:30 PM','1:00 PM','1:30 PM','2:00 PM','2:30 PM',
+  '3:00 PM','3:30 PM','4:00 PM','4:30 PM','5:00 PM','5:30 PM','6:00 PM','6:30 PM'
+];
+const SLOTS_SAT = [
+  '9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM',
+  '12:00 PM','12:30 PM','1:00 PM','1:30 PM','2:00 PM','2:30 PM',
+  '3:00 PM','3:30 PM','4:00 PM','4:30 PM'
+];
+
+function toKey(y, m, d) {
+  return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+}
+function todayKey() {
+  const n = new Date();
+  return toKey(n.getFullYear(), n.getMonth(), n.getDate());
+}
+function dateLabel(key, opts) {
+  return new Date(key + 'T12:00:00').toLocaleDateString('en-US', opts || { weekday:'short', month:'short', day:'numeric' });
+}
+
+// Flatten all bookings into a sorted array from cache
+function getAllBookings() {
+  const rows = [];
+  Object.entries(bookingsCache).forEach(([date, slots]) => {
+    Object.entries(slots).forEach(([time, b]) => {
+      rows.push({ date, time, ...b });
+    });
+  });
+  rows.sort((a,b) => a.date !== b.date ? (a.date < b.date ? -1:1) : slotOrder(a.time, b.time));
+  return rows;
+}
+
+function slotOrder(a, b) {
+  // sort by parsed time
+  return parseTime(a) - parseTime(b);
+}
+function parseTime(t) {
+  const [hm, ap] = t.split(' ');
+  let [h,m] = hm.split(':').map(Number);
+  if (ap === 'PM' && h !== 12) h += 12;
+  if (ap === 'AM' && h === 12) h = 0;
+  return h * 60 + m;
+}
+
+function dayStatus(key) {
+  const todayMs = new Date(todayKey() + 'T12:00:00').getTime();
+  const dMs     = new Date(key + 'T12:00:00').getTime();
+  if (dMs < todayMs) return 'past';
+  if (key === todayKey()) return 'today';
+  return 'upcoming';
+}
+
+// ══════════════════════════════════════════════
+//  INIT DASHBOARD
+// ══════════════════════════════════════════════
+let aCalYear, aCalMonth;
+
+function initDashboard() {
+  const now = new Date();
+  aCalYear  = now.getFullYear();
+  aCalMonth = now.getMonth();
+
+  document.getElementById('topbarDate').textContent =
+    now.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+  document.getElementById('todayDateSub').textContent =
+    now.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
+  document.getElementById('scheduleHeading').textContent =
+    "Today — " + now.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
+
+  renderOverview();
+  setupSidebar();
+  setupFilters();
+  renderAdminCal();
+  renderBlocked();
+}
+
+// ══════════════════════════════════════════════
+//  SIDEBAR NAVIGATION
+// ══════════════════════════════════════════════
+const PAGE_TITLES = {
+  overview: 'Overview',
+  schedule: "Today's Schedule",
+  appointments: 'All Appointments',
+  calendar: 'Calendar View',
+  availability: 'Availability',
+  analytics: 'Analytics',
+  messages: 'Messages',
+  settings: 'Settings',
+};
+
+function setupSidebar() {
+  document.querySelectorAll('.sb-link[data-page]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pg = btn.dataset.page;
+      document.querySelectorAll('.sb-link').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + pg).classList.add('active');
+      document.getElementById('topbarTitle').textContent = PAGE_TITLES[pg];
+      document.getElementById('sidebar').classList.remove('mob-open');
+
+      // lazy render on navigate
+      currentPage = pg;
+      if (pg === 'overview')     renderOverview();
+      if (pg === 'schedule')     renderTodaySchedule();
+      if (pg === 'appointments') renderApptTable();
+      if (pg === 'calendar')     renderAdminCal();
+      if (pg === 'availability') renderBlocked();
+      if (pg === 'analytics')    renderAnalytics();
+      if (pg === 'messages')     renderMessages();
+    });
+  });
+
+  // Mobile
+  document.getElementById('mobNavBtn').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('mob-open');
+  });
+}
+
+// ══════════════════════════════════════════════
+//  OVERVIEW
+// ══════════════════════════════════════════════
+function renderOverview() {
+  const all      = getAllBookings();
+  const tKey     = todayKey();
+  const todayMs  = new Date(tKey + 'T12:00:00').getTime();
+
+  const totalAll = all.length;
+  const upcoming = all.filter(r => new Date(r.date+'T12:00:00').getTime() > todayMs).length;
+  const todayArr = all.filter(r => r.date === tKey);
+  const blocked  = Object.keys(blockedCache).length;
+
+  // Stats
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card highlight"><div class="stat-num">${todayArr.length}</div><div class="stat-label">Today's Bookings</div></div>
+    <div class="stat-card"><div class="stat-num">${upcoming}</div><div class="stat-label">Upcoming</div></div>
+    <div class="stat-card"><div class="stat-num">${totalAll}</div><div class="stat-label">All Time</div></div>
+    <div class="stat-card"><div class="stat-num">${blocked}</div><div class="stat-label">Blocked Days</div></div>
+  `;
+
+  // Today list
+  const todayList = document.getElementById('todayList');
+  if (!todayArr.length) {
+    todayList.innerHTML = '<div class="empty-state">No appointments today.</div>';
+  } else {
+    todayList.innerHTML = todayArr.map(r => apptCard(r, false)).join('');
+  }
+
+  // This week
+  const weekEnd = new Date(tKey + 'T12:00:00');
+  weekEnd.setDate(weekEnd.getDate() + 7);
+  const weekArr = all.filter(r => {
+    const dMs = new Date(r.date+'T12:00:00').getTime();
+    return dMs > todayMs && dMs <= weekEnd.getTime();
+  });
+  const weekList = document.getElementById('weekList');
+  if (!weekArr.length) {
+    weekList.innerHTML = '<div class="empty-state">No upcoming bookings this week.</div>';
+  } else {
+    weekList.innerHTML = weekArr.slice(0,8).map(r => apptCard(r, true)).join('');
+  }
+
+  // Live all-bookings feed
+  const feedBadge = document.getElementById('feedLiveBadge');
+  if (feedBadge) feedBadge.style.display = 'flex';
+  const liveTbody = document.getElementById('liveTbody');
+  if (liveTbody) {
+    if (!all.length) {
+      liveTbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text-muted);font-style:italic">No bookings yet.</td></tr>';
+    } else {
+      liveTbody.innerHTML = all.map(r => {
+        const dMs    = new Date(r.date+'T12:00:00').getTime();
+        const isPast = dMs < todayMs;
+        const isToday= r.date === tKey;
+        const st     = isToday ? 'today' : isPast ? 'past' : 'upcoming';
+        const stLabel= isToday ? 'Today' : isPast ? 'Past' : 'Upcoming';
+        return `<tr class="${isPast ? 'past-row' : ''}">
+          <td><span class="status-pill ${st}">${stLabel}</span></td>
+          <td>${dateLabel(r.date, {month:'short',day:'numeric',year:'numeric'})}</td>
+          <td style="white-space:nowrap">${r.time}</td>
+          <td style="font-weight:600">${esc(r.name)}</td>
+          <td>${esc(r.phone)}</td>
+          <td>${esc(r.service)}</td>
+          <td style="color:var(--text-muted);font-size:.77rem;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.notes ? esc(r.notes) : '—'}</td>
+          <td><button class="btn-cancel" onclick="promptCancel('${r.date}','${r.time}')">Cancel</button></td>
+        </tr>`;
+      }).join('');
+    }
+  }
+}
+
+// ══════════════════════════════════════════════
+//  TODAY'S SCHEDULE
+// ══════════════════════════════════════════════
+function renderTodaySchedule() {
+  const tKey   = todayKey();
+  const all    = getAllBookings().filter(r => r.date === tKey);
+  const list   = document.getElementById('scheduleList');
+  if (!all.length) {
+    list.innerHTML = '<div class="empty-state">No appointments scheduled for today.</div>';
+  } else {
+    list.innerHTML = all.map(r => apptCard(r, false)).join('');
+  }
+}
+
+// ══════════════════════════════════════════════
+//  APPOINTMENT CARD HTML
+// ══════════════════════════════════════════════
+function apptCard(r, showDate) {
+  const dateStr = showDate
+    ? `<span style="font-size:.72rem;color:var(--text-muted)">${dateLabel(r.date)}</span> · `
+    : '';
+  return `
+    <div class="appt-item">
+      <div class="appt-time">${r.time}</div>
+      <div class="appt-info">
+        <div class="appt-name">${esc(r.name)}</div>
+        <div class="appt-detail">${dateStr}${esc(r.phone)}${r.notes ? ' · <em>'+esc(r.notes)+'</em>' : ''}</div>
+      </div>
+      <div class="appt-service">${esc(r.service)}</div>
+      <div class="appt-actions">
+        <button class="btn-cancel" onclick="promptCancel('${r.date}','${r.time}')">Cancel</button>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════
+//  ALL APPOINTMENTS TABLE
+// ══════════════════════════════════════════════
+function setupFilters() {
+  ['filterStatus','filterService','filterSearch'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', renderApptTable);
+  });
+}
+
+function renderApptTable() {
+  const status  = document.getElementById('filterStatus').value;
+  const service = document.getElementById('filterService').value;
+  const search  = document.getElementById('filterSearch').value.trim().toLowerCase();
+  const tKey    = todayKey();
+  const todayMs = new Date(tKey+'T12:00:00').getTime();
+
+  let rows = getAllBookings();
+
+  if (status === 'upcoming') rows = rows.filter(r => new Date(r.date+'T12:00:00').getTime() > todayMs);
+  if (status === 'today')    rows = rows.filter(r => r.date === tKey);
+  if (status === 'past')     rows = rows.filter(r => new Date(r.date+'T12:00:00').getTime() < todayMs);
+  if (service !== 'all')     rows = rows.filter(r => r.service === service);
+  if (search) rows = rows.filter(r =>
+    r.name.toLowerCase().includes(search) || r.phone.toLowerCase().includes(search)
+  );
+
+  document.getElementById('apptCount').textContent = `${rows.length} result${rows.length !== 1 ? 's' : ''}`;
+
+  const tbody = document.getElementById('apptTbody');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--text-muted);font-style:italic">No appointments match your filters.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = rows.map(r => {
+    const dMs   = new Date(r.date+'T12:00:00').getTime();
+    const isPast = dMs < todayMs;
+    const isToday= r.date === tKey;
+    const st    = isToday ? 'today' : isPast ? 'past' : 'upcoming';
+    const stLabel= isToday ? 'Today' : isPast ? 'Past' : 'Upcoming';
+    return `<tr class="${isPast ? 'past-row' : ''}">
+      <td><span class="status-pill ${st}">${stLabel}</span></td>
+      <td>${dateLabel(r.date, {month:'short',day:'numeric',year:'numeric'})}</td>
+      <td style="white-space:nowrap">${r.time}</td>
+      <td style="font-weight:600">${esc(r.name)}</td>
+      <td>${esc(r.phone)}</td>
+      <td>${esc(r.service)}</td>
+      <td style="color:var(--text-muted);font-size:.77rem;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.notes ? esc(r.notes) : '—'}</td>
+      <td class="ref-code">${r.id}</td>
+      <td><button class="btn-cancel" onclick="promptCancel('${r.date}','${r.time}')">Cancel</button></td>
+    </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+//  CALENDAR VIEW (Admin)
+// ══════════════════════════════════════════════
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+let selectedCalDay = null;
+
+function renderAdminCal() {
+  document.getElementById('aCalTitle').textContent = `${MONTHS[aCalMonth]} ${aCalYear}`;
+  const blocked   = Object.keys(blockedCache);
+  const todayMs   = new Date(todayKey()+'T12:00:00').getTime();
+  const firstDow  = new Date(aCalYear, aCalMonth, 1).getDay();
+  const daysInMon = new Date(aCalYear, aCalMonth + 1, 0).getDate();
+
+  const container = document.getElementById('aCalDays');
+  container.innerHTML = '';
+
+  for (let i = 0; i < firstDow; i++) {
+    const el = document.createElement('div'); el.className = 'acal-day empty'; container.appendChild(el);
+  }
+
+  for (let d = 1; d <= daysInMon; d++) {
+    const key = toKey(aCalYear, aCalMonth, d);
+    const dMs = new Date(key+'T12:00:00').getTime();
+    const dow = new Date(key+'T12:00:00').getDay();
+    const el  = document.createElement('div');
+    el.className = 'acal-day';
+
+    const numEl = document.createElement('div');
+    numEl.className = 'day-num'; numEl.textContent = d;
+    el.appendChild(numEl);
+
+    if (dMs === todayMs)         el.classList.add('today-ring');
+    if (key === selectedCalDay)  el.classList.add('selected');
+
+    if (CLOSED_DOW.includes(dow)) {
+      el.classList.add('closed');
+    } else if (blocked.includes(key)) {
+      el.classList.add('blocked');
+      const dotRow = document.createElement('div'); dotRow.className = 'dot-row';
+      const dot = document.createElement('div'); dot.className = 'acal-dot red';
+      dotRow.appendChild(dot); el.appendChild(dotRow);
+    } else {
+      const daySlots = bookingsCache[key] ? Object.keys(bookingsCache[key]).length : 0;
+      if (daySlots > 0) {
+        el.classList.add('has-appts');
+        const dotRow = document.createElement('div'); dotRow.className = 'dot-row';
+        const count = Math.min(daySlots, 4);
+        for (let x = 0; x < count; x++) {
+          const dot = document.createElement('div'); dot.className = 'acal-dot'; dotRow.appendChild(dot);
+        }
+        el.appendChild(dotRow);
+      }
+      el.classList.add('clickable');
+      el.addEventListener('click', () => selectCalDay(key));
+    }
+
+    container.appendChild(el);
+  }
+}
+
+document.getElementById('aCalPrev').addEventListener('click', () => {
+  aCalMonth--; if (aCalMonth < 0) { aCalMonth = 11; aCalYear--; }
+  renderAdminCal();
+});
+document.getElementById('aCalNext').addEventListener('click', () => {
+  aCalMonth++; if (aCalMonth > 11) { aCalMonth = 0; aCalYear++; }
+  renderAdminCal();
+});
+
+function selectCalDay(key) {
+  selectedCalDay = key;
+  renderAdminCal();
+  openDayPanel(key);
+}
+
+function clearDayPanel() {
+  selectedCalDay = null;
+  renderAdminCal();
+  const panel = document.getElementById('dayPanel');
+  document.getElementById('dayPanelTitle').textContent = 'Select a day to view appointments';
+  document.getElementById('dayPanelList').innerHTML = '<div class="empty-state">Click any day on the calendar to view its appointments.</div>';
+}
+
+function openDayPanel(key) {
+  const panel = document.getElementById('dayPanel');
+  panel.classList.add('open');
+  const dLabel = dateLabel(key, { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+  document.getElementById('dayPanelTitle').textContent = dLabel;
+
+  const day = bookingsCache[key] || {};
+  const slots = Object.entries(day).sort((a,b) => slotOrder(a[0],b[0]));
+
+  const list = document.getElementById('dayPanelList');
+  if (!slots.length) {
+    list.innerHTML = '<div class="empty-state">No appointments on this day.</div>';
+    return;
+  }
+  list.innerHTML = slots.map(([time, b]) =>
+    apptCard({ date:key, time, ...b }, false)
+  ).join('');
+}
+
+// ══════════════════════════════════════════════
+//  AVAILABILITY (BLOCKED DAYS)
+// ══════════════════════════════════════════════
+function renderBlocked() {
+  const grid = document.getElementById('blockedGrid');
+  const keys = Object.keys(blockedCache).sort();
+  if (!keys.length) {
+    grid.innerHTML = '<p style="color:var(--text-muted);font-size:0.82rem">No days currently blocked.</p>';
+    return;
+  }
+  grid.innerHTML = keys.map(d => {
+    const fmt  = dateLabel(d, { weekday:'short', month:'short', day:'numeric', year:'numeric' });
+    const note = (blockedCache[d] || {}).note || '';
+    return `<div class="blocked-chip">
+      <div>
+        <div class="blocked-chip-date">${fmt}</div>
+        ${note ? `<div class="blocked-chip-note">${esc(note)}</div>` : ''}
+      </div>
+      <button class="chip-del" data-unblock="${d}" title="Unblock">✕</button>
+    </div>`;
+  }).join('');
+  grid.querySelectorAll('[data-unblock]').forEach(btn =>
+    btn.addEventListener('click', () => removeBlock(btn.dataset.unblock))
+  );
+}
+
+async function addBlock() {
+  const d    = document.getElementById('blockDateIn').value;
+  const note = document.getElementById('blockNoteIn').value.trim();
+  if (!d) { toast('Pick a date first.', 'err'); return; }
+  if (blockedCache[d]) { toast('Already blocked.', 'err'); return; }
+  try {
+    await setDoc(doc(db, 'config', 'settings'),
+      { blocked: { [d]: { note } } }, { merge: true });
+    document.getElementById('blockDateIn').value = '';
+    document.getElementById('blockNoteIn').value = '';
+    toast('Day blocked ✓');
+    // onSnapshot refreshes the UI automatically
+  } catch(err) {
+    console.error(err); toast('Failed to block day.', 'err');
+  }
+}
+
+function removeBlock(d) {
+  const fmt = dateLabel(d, { month:'short', day:'numeric', year:'numeric' });
+  pendingAction = async () => {
+    try {
+      await updateDoc(doc(db, 'config', 'settings'),
+        { [`blocked.${d}`]: deleteField() });
+      toast('Day unblocked');
+    } catch(err) {
+      console.error(err); toast('Failed to unblock.', 'err');
+    }
+  };
+  showConfirm(
+    'Unblock This Day?',
+    `Are you sure you want to make <strong>${fmt}</strong> available for booking again?`,
+    '', 'Yes, Unblock'
+  );
+}
+
+// ══════════════════════════════════════════════
+//  CANCEL / DELETE BOOKING
+// ══════════════════════════════════════════════
+let pendingAction = null;
+
+function promptCancel(date, time) {
+  const b = (bookingsCache[date] || {})[time];
+  if (!b) return;
+  const dStr = dateLabel(date, { weekday:'long', month:'long', day:'numeric' });
+  pendingAction = () => deleteBooking(date, time);
+  showConfirm(
+    'Cancel Appointment?',
+    'This will permanently remove the booking. The client will not be automatically notified.',
+    `<p><strong>${esc(b.name)}</strong></p>
+     <p>${dStr} at <strong>${time}</strong></p>
+     <p>${esc(b.service)}</p>
+     ${b.phone ? `<p>📞 ${esc(b.phone)}</p>` : ''}`,
+    'Cancel Appointment'
+  );
+}
+
+async function deleteBooking(date, time) {
+  try {
+    await updateDoc(doc(db, 'bookings', date), { [time]: deleteField() });
+    toast('Appointment cancelled ✓');
+    // onSnapshot refreshes all views automatically
+  } catch(err) {
+    console.error(err); toast('Failed to cancel booking.', 'err');
+  }
+}
+
+function showConfirm(title, desc, detail, okLabel) {
+  document.getElementById('confirmTitle').textContent   = title;
+  document.getElementById('confirmDesc').innerHTML      = desc;
+  document.getElementById('confirmDetail').innerHTML    = detail;
+  document.getElementById('confirmOkBtn').textContent   = okLabel;
+  document.getElementById('confirmOkBtn').onclick = async () => {
+    const action = pendingAction;
+    closeConfirm();
+    if (action) await action();
+  };
+  document.getElementById('confirmOverlay').classList.add('on');
+}
+function closeConfirm() {
+  document.getElementById('confirmOverlay').classList.remove('on');
+  pendingAction = null;
+}
+document.getElementById('confirmOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeConfirm();
+});
+
+// ══════════════════════════════════════════════
+//  SETTINGS
+// ══════════════════════════════════════════════
+document.getElementById('pwForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const curr    = document.getElementById('pwCurrent').value;
+  const nw      = document.getElementById('pwNew').value;
+  const confirm = document.getElementById('pwConfirm').value;
+  const msg     = document.getElementById('pwMsg');
+  const user    = auth.currentUser;
+
+  if (!user) { showMsg(msg, 'Not logged in.', 'err'); return; }
+  if (nw.length < 6)  { showMsg(msg, 'New password must be at least 6 characters.', 'err'); return; }
+  if (nw !== confirm) { showMsg(msg, 'Passwords do not match.', 'err'); return; }
+
+  const credential = EmailAuthProvider.credential(user.email, curr);
+  reauthenticateWithCredential(user, credential)
+    .then(() => updatePassword(user, nw))
+    .then(() => {
+      this.reset();
+      showMsg(msg, 'Password updated successfully.', 'ok');
+      toast('Password changed ✓');
+    })
+    .catch(err2 => {
+      const text = err2.code === 'auth/wrong-password' || err2.code === 'auth/invalid-credential'
+        ? 'Current password is incorrect.' : 'Error updating password. Try again.';
+      showMsg(msg, text, 'err');
+    });
+});
+
+function showMsg(el, text, type) {
+  el.textContent = text;
+  el.className   = `save-msg ${type}`;
+  setTimeout(() => el.className = 'save-msg', 4000);
+}
+
+function confirmClearAll() {
+  pendingAction = async () => {
+    try {
+      // Delete every booking document in a batch
+      const snap  = await getDocs(collection(db, 'bookings'));
+      const batch = writeBatch(db);
+      snap.forEach(d => batch.delete(d.ref));
+      // Reset blocked dates
+      batch.set(doc(db, 'config', 'settings'), { blocked: {} });
+      await batch.commit();
+      toast('All data cleared.');
+    } catch(err) {
+      console.error(err); toast('Failed to clear data.', 'err');
+    }
+  };
+  showConfirm(
+    'Clear ALL Data?',
+    'This will permanently delete <strong>all bookings and blocked dates</strong>. This cannot be undone.',
+    '', 'Delete Everything'
+  );
+}
+
+// ══════════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════════
+let toastTmr;
+function toast(msg, type = 'ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className   = `toast t-${type} show`;
+  clearTimeout(toastTmr);
+  toastTmr = setTimeout(() => el.classList.remove('show'), 3200);
+}
+
+// ══════════════════════════════════════════════
+//  UTIL
+// ══════════════════════════════════════════════
+function esc(s) {
+  return String(s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// ══════════════════════════════════════════════
+//  ANALYTICS
+// ══════════════════════════════════════════════
+const SERVICE_PRICES = {
+  'Classic Cut': 20,
+  'Classic Cut + Beard': 25,
+  'Classic Cut + Design': 25,
+};
+
+let analyticsTab = 'day';
+let analyticsResetDate = null; // Date object — only count bookings on/after this
+
+function setAnalyticsTab(tab, btn) {
+  analyticsTab = tab;
+  document.querySelectorAll('.atab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAnalytics();
+}
+
+function getAnalyticsBookings() {
+  const all = getAllBookings();
+  if (!analyticsResetDate) return all;
+  return all.filter(r => new Date(r.date + 'T12:00:00') >= analyticsResetDate);
+}
+
+function renderAnalytics() {
+  const today = new Date();
+  const todayStr = todayKey();
+  let fromDate;
+  let labelFn, buckets;
+
+  if (analyticsTab === 'day') {
+    fromDate = new Date(todayStr + 'T00:00:00');
+    document.getElementById('chart-title').textContent = 'Appointments Today';
+  } else if (analyticsTab === 'week') {
+    fromDate = new Date(today); fromDate.setDate(today.getDate() - 6); fromDate.setHours(0,0,0,0);
+    document.getElementById('chart-title').textContent = 'Revenue — Last 7 Days';
+  } else if (analyticsTab === 'month') {
+    fromDate = new Date(today); fromDate.setDate(today.getDate() - 29); fromDate.setHours(0,0,0,0);
+    document.getElementById('chart-title').textContent = 'Revenue — Last 30 Days';
+  } else {
+    fromDate = new Date(today); fromDate.setMonth(today.getMonth() - 6); fromDate.setHours(0,0,0,0);
+    document.getElementById('chart-title').textContent = 'Revenue — Last 6 Months';
+  }
+
+  const allFiltered = getAnalyticsBookings().filter(r => new Date(r.date + 'T12:00:00') >= fromDate);
+  const revenue = allFiltered.reduce((s, r) => s + (SERVICE_PRICES[r.service] || 0), 0);
+  const count   = allFiltered.length;
+  const avg     = count ? Math.round(revenue / count) : 0;
+  // top service
+  const svcCounts = {};
+  allFiltered.forEach(r => { svcCounts[r.service] = (svcCounts[r.service]||0) + 1; });
+  const topSvc = Object.entries(svcCounts).sort((a,b) => b[1]-a[1])[0];
+
+  document.getElementById('analytics-stats').innerHTML = `
+    <div class="astat highlight"><div class="astat-num">$${revenue}</div><div class="astat-label">Total Revenue</div></div>
+    <div class="astat"><div class="astat-num">${count}</div><div class="astat-label">Appointments</div></div>
+    <div class="astat"><div class="astat-num">$${avg}</div><div class="astat-label">Avg per Booking</div></div>
+    <div class="astat"><div class="astat-num" style="font-size:1.1rem;padding-top:.4rem">${topSvc ? topSvc[0] : '—'}</div><div class="astat-label">Top Service</div></div>
+  `;
+
+  // Bar chart
+  renderBarChart(allFiltered, fromDate);
+
+  // Service breakdown
+  const svcRevenue = {};
+  allFiltered.forEach(r => {
+    const p = SERVICE_PRICES[r.service] || 0;
+    svcRevenue[r.service] = (svcRevenue[r.service]||0) + p;
+  });
+  const maxRev = Math.max(...Object.values(svcRevenue), 1);
+  const breakdown = document.getElementById('service-breakdown');
+  const entries = Object.entries(svcRevenue).sort((a,b) => b[1]-a[1]);
+  if (!entries.length) { breakdown.innerHTML = '<div style="color:var(--text-muted);font-size:.85rem;font-style:italic">No data for this period.</div>'; return; }
+  breakdown.innerHTML = entries.map(([svc, rev]) => `
+    <div class="svc-row">
+      <div class="svc-row-name">${svc}</div>
+      <div class="svc-bar-bg"><div class="svc-bar-fill" style="width:${Math.round(rev/maxRev*100)}%"></div></div>
+      <div class="svc-row-val">$${rev}</div>
+    </div>`).join('');
+}
+
+function renderBarChart(bookings, fromDate) {
+  const chart = document.getElementById('analytics-chart');
+  const bucketMap = {};
+
+  if (analyticsTab === 'day') {
+    // by hour
+    for (let h = 9; h <= 18; h++) {
+      const label = h <= 12 ? `${h}AM` : `${h-12}PM`;
+      bucketMap[String(h)] = { label, rev: 0, count: 0 };
+    }
+    bookings.forEach(r => {
+      const h = parseTime(r.time) / 60;
+      const key = String(Math.floor(h));
+      if (bucketMap[key]) { bucketMap[key].rev += SERVICE_PRICES[r.service]||0; bucketMap[key].count++; }
+    });
+  } else if (analyticsTab === 'week') {
+    const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate() - i); d.setHours(0,0,0,0);
+      const key = d.toISOString().slice(0,10);
+      bucketMap[key] = { label: days[d.getDay()], rev: 0, count: 0 };
+    }
+    bookings.forEach(r => { if (bucketMap[r.date]) { bucketMap[r.date].rev += SERVICE_PRICES[r.service]||0; bucketMap[r.date].count++; } });
+  } else if (analyticsTab === 'month') {
+    // group by week
+    for (let w = 3; w >= 0; w--) {
+      const label = w === 0 ? 'This Wk' : `${w}w ago`;
+      bucketMap[String(w)] = { label, rev: 0, count: 0 };
+    }
+    bookings.forEach(r => {
+      const daysAgo = Math.floor((new Date() - new Date(r.date+'T12:00:00')) / 86400000);
+      const w = Math.min(3, Math.floor(daysAgo / 7));
+      if (bucketMap[String(w)]) { bucketMap[String(w)].rev += SERVICE_PRICES[r.service]||0; bucketMap[String(w)].count++; }
+    });
+  } else {
+    // 6 months — by month
+    for (let m = 5; m >= 0; m--) {
+      const d = new Date(); d.setMonth(d.getMonth() - m);
+      const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+      const label = d.toLocaleString('en-US',{month:'short'});
+      bucketMap[key] = { label, rev: 0, count: 0 };
+    }
+    bookings.forEach(r => {
+      const key = r.date.slice(0,7);
+      if (bucketMap[key]) { bucketMap[key].rev += SERVICE_PRICES[r.service]||0; bucketMap[key].count++; }
+    });
+  }
+
+  const buckets = Object.values(bucketMap);
+  const maxRev = Math.max(...buckets.map(b => b.rev), 1);
+  chart.innerHTML = buckets.map(b => {
+    const pct = Math.round(b.rev / maxRev * 100);
+    return `<div class="bar-wrap">
+      <div class="bar" style="height:${pct}%">
+        <div class="bar-tooltip">$${b.rev}${b.count ? ` (${b.count})` : ''}</div>
+      </div>
+      <div class="bar-label">${b.label}</div>
+    </div>`;
+  }).join('');
+}
+
+function confirmResetAnalytics() {
+  showConfirm(
+    'Reset Analytics',
+    'This will clear all analytics data. Existing appointments will <strong>not</strong> be deleted — only the analytics counts will reset to zero.',
+    '<p><strong>Action:</strong> Reset analytics start date to now</p>',
+    'Reset Analytics',
+  );
+  pendingAction = async () => {
+    analyticsResetDate = new Date();
+    await setDoc(doc(db, 'settings', 'analytics'), { resetDate: serverTimestamp() });
+    toast('Analytics reset ✓');
+    renderAnalytics();
+  };
+}
+
+// Load analytics reset date on startup
+async function loadAnalyticsSettings() {
+  onSnapshot(doc(db, 'settings', 'analytics'), snap => {
+    if (snap.exists() && snap.data().resetDate) {
+      analyticsResetDate = snap.data().resetDate.toDate();
+    }
+    if (currentPage === 'analytics') renderAnalytics();
+  });
+}
+
+// ══════════════════════════════════════════════
+//  MESSAGES / CHAT
+// ══════════════════════════════════════════════
+let allChats = {};
+let selectedChatId = null;
+let convoUnsub = null;
+let chatsUnsub = null;
+
+function renderMessages() {
+  if (chatsUnsub) return; // already listening
+  chatsUnsub = onSnapshot(collection(db, 'chats'), snap => {
+    allChats = {};
+    let totalUnread = 0;
+    snap.forEach(d => {
+      allChats[d.id] = { id: d.id, ...d.data() };
+      if ((d.data().unread || 0) > 0) totalUnread++;
+    });
+    renderChatList();
+    // badge
+    const badge = document.getElementById('chat-badge');
+    if (totalUnread > 0) { badge.style.display = 'inline'; badge.textContent = totalUnread; }
+    else badge.style.display = 'none';
+  });
+}
+
+function renderChatList() {
+  const body = document.getElementById('msg-list-body');
+  const chats = Object.values(allChats).sort((a, b) => {
+    const ta = a.lastTime ? a.lastTime.toMillis() : 0;
+    const tb = b.lastTime ? b.lastTime.toMillis() : 0;
+    return tb - ta;
+  });
+  if (!chats.length) { body.innerHTML = '<div class="empty-state">No messages yet.</div>'; return; }
+  body.innerHTML = chats.map(c => {
+    const hasUnread = (c.unread || 0) > 0;
+    const t = c.lastTime ? new Date(c.lastTime.toMillis()).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : '';
+    return `<div class="msg-item ${selectedChatId===c.id?'active':''} ${hasUnread?'unread':''}" onclick="openConvo('${c.id}')">
+      <div class="msg-item-name">${c.userName || 'Unknown'} ${hasUnread?'<span style="background:var(--red);color:#fff;font-size:.6rem;padding:1px 5px;border-radius:8px;margin-left:4px">NEW</span>':''}</div>
+      <div class="msg-item-preview">${c.lastMsg || 'No messages yet'}</div>
+      <div class="msg-item-time">${t}</div>
+    </div>`;
+  }).join('');
+}
+
+function openConvo(chatId) {
+  selectedChatId = chatId;
+  renderChatList(); // re-render list to update active state
+
+  document.getElementById('msg-convo-empty').style.display = 'none';
+  const inner = document.getElementById('msg-convo-inner');
+  inner.style.display = 'flex';
+
+  const chat = allChats[chatId];
+  const initial = (chat.userName || '?')[0].toUpperCase();
+  document.getElementById('convo-avatar').textContent = initial;
+  document.getElementById('convo-name').textContent = chat.userName || 'Unknown';
+
+  // clear unread
+  updateDoc(doc(db, 'chats', chatId), { unread: 0 }).catch(() => {});
+
+  // listen to messages
+  if (convoUnsub) convoUnsub();
+  const q = query(collection(db, 'chats', chatId, 'messages'), orderBy('time', 'asc'));
+  convoUnsub = onSnapshot(q, snap => {
+    const container = document.getElementById('convo-messages');
+    if (snap.empty) { container.innerHTML = '<div style="text-align:center;color:var(--text-muted);font-size:.82rem;padding:2rem;font-style:italic">No messages yet</div>'; return; }
+    container.innerHTML = '';
+    snap.forEach(d => {
+      const m = d.data();
+      const div = document.createElement('div');
+      div.className = 'msg-bubble ' + m.sender;
+      const t = m.time ? new Date(m.time.toMillis()).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : '';
+      const textDiv = document.createElement('div');
+      textDiv.textContent = m.text;
+      const timeDiv = document.createElement('div');
+      timeDiv.className = 'msg-bubble-time';
+      timeDiv.textContent = t;
+      div.appendChild(textDiv);
+      div.appendChild(timeDiv);
+      container.appendChild(div);
+    });
+    container.scrollTop = container.scrollHeight;
+  });
+}
+
+async function adminSendMsg() {
+  if (!selectedChatId) return;
+  const input = document.getElementById('msg-reply-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  await addDoc(collection(db, 'chats', selectedChatId, 'messages'), {
+    text, sender: 'sowmith', time: serverTimestamp()
+  });
+  await updateDoc(doc(db, 'chats', selectedChatId), {
+    lastMsg: text, lastTime: serverTimestamp(), unread: 0, unreadUser: 1
+  });
+}
+
+// Start listening to chats for badge as soon as logged in
+function startChatListener() {
+  onSnapshot(collection(db, 'chats'), snap => {
+    let totalUnread = 0;
+    snap.forEach(d => { if ((d.data().unread || 0) > 0) totalUnread++; });
+    const badge = document.getElementById('chat-badge');
+    if (badge) {
+      if (totalUnread > 0) { badge.style.display = 'inline'; badge.textContent = totalUnread; }
+      else badge.style.display = 'none';
+    }
+  });
+}
+
+// ══════════════════════════════════════════════
+//  BUSINESS HOURS / SCHEDULE EDITOR
+// ══════════════════════════════════════════════
+const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const DEFAULT_SCHEDULE = {
+  0: { open: false },
+  1: { open: false },
+  2: { open: true, from: '09:00', to: '19:00' },
+  3: { open: true, from: '09:00', to: '19:00' },
+  4: { open: true, from: '09:00', to: '19:00' },
+  5: { open: true, from: '09:00', to: '19:00' },
+  6: { open: true, from: '09:00', to: '17:00' }
+};
+
+function renderScheduleEditor(schedule) {
+  const editor = document.getElementById('schedEditor');
+  if (!editor) return;
+  const s = schedule || DEFAULT_SCHEDULE;
+  editor.innerHTML = DAY_NAMES.map((name, i) => {
+    const day  = s[i] || { open: false };
+    const from = day.from || '09:00';
+    const to   = day.to   || '17:00';
+    return `
+    <div style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem 0.8rem;background:var(--dark-4);border:1px solid var(--border);border-radius:8px;flex-wrap:wrap">
+      <span style="width:90px;font-size:0.85rem;font-weight:500">${name}</span>
+      <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.82rem">
+        <input type="checkbox" id="sched-open-${i}" ${day.open ? 'checked' : ''} onchange="toggleSchedDay(${i})" style="accent-color:var(--gold);width:16px;height:16px">
+        <span id="sched-label-${i}" style="color:${day.open ? 'var(--gold)' : 'var(--text-muted)'}">${day.open ? 'Open' : 'Closed'}</span>
+      </label>
+      <div id="sched-times-${i}" style="display:${day.open ? 'flex' : 'none'};align-items:center;gap:0.5rem;flex:1">
+        <input type="time" id="sched-from-${i}" value="${from}" style="background:var(--dark-3);border:1px solid var(--border);border-radius:6px;padding:0.3rem 0.5rem;color:var(--text);font-size:0.82rem">
+        <span style="color:var(--text-muted);font-size:0.8rem">to</span>
+        <input type="time" id="sched-to-${i}" value="${to}" style="background:var(--dark-3);border:1px solid var(--border);border-radius:6px;padding:0.3rem 0.5rem;color:var(--text);font-size:0.82rem">
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.toggleSchedDay = function(i) {
+  const isOpen = document.getElementById(`sched-open-${i}`).checked;
+  document.getElementById(`sched-label-${i}`).textContent = isOpen ? 'Open' : 'Closed';
+  document.getElementById(`sched-label-${i}`).style.color = isOpen ? 'var(--gold)' : 'var(--text-muted)';
+  document.getElementById(`sched-times-${i}`).style.display = isOpen ? 'flex' : 'none';
+};
+
+window.saveSchedule = async function() {
+  const status = document.getElementById('schedSaveStatus');
+  status.textContent = 'Saving…';
+  const schedule = {};
+  for (let i = 0; i < 7; i++) {
+    const open = document.getElementById(`sched-open-${i}`)?.checked || false;
+    const from = document.getElementById(`sched-from-${i}`)?.value || '09:00';
+    const to   = document.getElementById(`sched-to-${i}`)?.value   || '17:00';
+    schedule[i] = open ? { open: true, from, to } : { open: false };
+  }
+  try {
+    await setDoc(doc(db, 'config', 'settings'), { schedule }, { merge: true });
+    status.textContent = '✓ Saved';
+    setTimeout(() => { status.textContent = ''; }, 2500);
+  } catch(e) {
+    status.textContent = 'Error saving';
+    console.error(e);
+  }
+};
+
+// Init editor with defaults on page load
+renderScheduleEditor(null);
+
+// ══════════════════════════════════════════════
+//  EXPOSE GLOBALS (required for onclick= in HTML)
+// ══════════════════════════════════════════════
+// ══════════════════════════════════════════════
+//  EXPORT TO CALENDAR (ICS)
+// ══════════════════════════════════════════════
+function exportToCalendar() {
+  const today = todayKey();
+  const upcoming = getAllBookings().filter(r => r.date >= today);
+
+  if (!upcoming.length) {
+    alert('No upcoming appointments to export.');
+    return;
+  }
+
+  const pad = n => String(n).padStart(2, '0');
+
+  function toICSDate(dateStr, timeStr) {
+    // dateStr: 'YYYY-MM-DD', timeStr: '9:00 AM'
+    const [y, mo, d] = dateStr.split('-').map(Number);
+    let [time, ampm] = timeStr.split(' ');
+    let [h, m] = time.split(':').map(Number);
+    if (ampm === 'PM' && h !== 12) h += 12;
+    if (ampm === 'AM' && h === 12) h = 0;
+    return `${y}${pad(mo)}${pad(d)}T${pad(h)}${pad(m)}00`;
+  }
+
+  function toICSDateEnd(dateStr, timeStr) {
+    // appointments are 30 min long
+    const [y, mo, d] = dateStr.split('-').map(Number);
+    let [time, ampm] = timeStr.split(' ');
+    let [h, m] = time.split(':').map(Number);
+    if (ampm === 'PM' && h !== 12) h += 12;
+    if (ampm === 'AM' && h === 12) h = 0;
+    m += 30;
+    if (m >= 60) { h += 1; m -= 60; }
+    return `${y}${pad(mo)}${pad(d)}T${pad(h)}${pad(m)}00`;
+  }
+
+  const events = upcoming.map(r => {
+    const uid = `${r.date}-${r.time.replace(/[^0-9]/g,'')}@sowmithcuts`;
+    const start = toICSDate(r.date, r.time);
+    const end   = toICSDateEnd(r.date, r.time);
+    const summary = `Haircut — ${r.name}`;
+    const desc = `Service: ${r.service}\\nPhone: ${r.phone}${r.notes ? '\\nNotes: ' + r.notes : ''}`;
+    return [
+      'BEGIN:VEVENT',
+      `UID:${uid}`,
+      `DTSTART:${start}`,
+      `DTEND:${end}`,
+      `SUMMARY:${summary}`,
+      `DESCRIPTION:${desc}`,
+      'END:VEVENT'
+    ].join('\r\n');
+  }).join('\r\n');
+
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Sowmith Cuts//Admin//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    events,
+    'END:VCALENDAR'
+  ].join('\r\n');
+
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = 'sowmithcuts-appointments.ics';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+Object.assign(window, {
+  logout, promptCancel, addBlock, removeBlock,
+  confirmClearAll, clearDayPanel, closeConfirm,
+  openConvo, adminSendMsg,
+  setAnalyticsTab, confirmResetAnalytics,
+  exportToCalendar
+});
+
+// ══════════════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════════════
+// Auth is handled by onAuthStateChanged above
+</script>
+</body>
+</html>

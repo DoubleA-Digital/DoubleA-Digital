@@ -1,0 +1,41 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//sebbo.net//ical-generator//EN
+NAME:Sowmith Cuts — Appointments
+X-WR-CALNAME:Sowmith Cuts — Appointments
+TIMEZONE-ID:America/Los_Angeles
+X-WR-TIMEZONE:America/Los_Angeles
+BEGIN:VEVENT
+UID:a60dab0c-dffe-40dd-8ef0-5319bb28b872
+SEQUENCE:0
+DTSTAMP:20260418T235425
+DTSTART;TZID=America/Los_Angeles:20260415T090000
+DTEND;TZID=America/Los_Angeles:20260415T093000
+SUMMARY:Classic Cut — Abram mealy
+LOCATION:Sowmith Cuts\, Simi Valley CA
+DESCRIPTION:Client: Abram mealy\nPhone: 8054096322\nNotes: Shave my pines\
+ nRef: MNNUBF38W6D
+END:VEVENT
+BEGIN:VEVENT
+UID:00049c19-95a9-44c4-864e-6a73c56c74df
+SEQUENCE:0
+DTSTAMP:20260418T235425
+DTSTART;TZID=America/Los_Angeles:20260430T183000
+DTEND;TZID=America/Los_Angeles:20260430T190000
+SUMMARY:Standard Cut + Design — Aarush Gurram
+LOCATION:Sowmith Cuts\, Simi Valley CA
+DESCRIPTION:Client: Aarush Gurram\nPhone: 18052841628\nNotes: i am a lard\
+ nRef: MN9K8CUP1C4
+END:VEVENT
+BEGIN:VEVENT
+UID:f1962e0d-5595-4aa0-b3c8-894375aa3212
+SEQUENCE:0
+DTSTAMP:20260418T235425
+DTSTART;TZID=America/Los_Angeles:20260430T170000
+DTEND;TZID=America/Los_Angeles:20260430T173000
+SUMMARY:Standard Cut + Design — Aarush Gurram
+LOCATION:Sowmith Cuts\, Simi Valley CA
+DESCRIPTION:Client: Aarush Gurram\nPhone: 18052841628\nNotes: i am a lard\
+ nRef: MNRQJLR2F8V
+END:VEVENT
+END:VCALENDAR
